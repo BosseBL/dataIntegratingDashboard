@@ -10,6 +10,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { callbackify } from "util";
+import { Typography } from "@material-ui/core";
 
 
 const styles = theme => ({
@@ -20,11 +22,16 @@ const styles = theme => ({
         height: '300px',
         overflow: 'auto',
       },
+    table : {
+        width: '100%',
+    },
     tableHeader: {
-        position: 'fixed',
+        position: 'sticky',
+        top: '0',
+        backgroundColor: 'lightblue',
+        width: 'auto',
     },
     tableBody: {
-        paddingTop: '40px',
     }
 });
 
@@ -66,33 +73,33 @@ class DashboardArea extends React.Component {
             console.log(this.state.data);
             return (
                 <div>
-                <div className={classes.appBarSpacer}/>
-                    <Paper className={classes.root}>
-                        <Table className={classes.table}>
-                            <TableHead className={classes.tableHeader}>
-                                <TableRow>
-                                    {Object.keys(this.state.data[0]).map(n => {
+                    <div className={classes.appBarSpacer}/>
+                        <Paper className={classes.root}>
+                            <Table className={classes.table}>
+                                <TableHead >
+                                    <TableRow >
+                                        {Object.keys(this.state.data[0]).map(n => {
+                                            return (
+                                                <TableCell key={n} className={classes.tableHeader}> {n} </TableCell>
+                                            );
+                                    })}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody className={classes.tableBody}>
+                                    {this.state.data.map(n => {
                                         return (
-                                            <TableCell> {n} </TableCell>
+                                            <TableRow key={n.id.toString()}>
+                                                {Object.keys(n).map((key, index) => {
+                                                    return (
+                                                        <TableCell key={n.id.toString() + key}> {n[key]} </TableCell>
+                                                    );
+                                                })}
+                                            </TableRow>
                                         );
-                                })}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.state.data.map(n => {
-                                    return (
-                                        <TableRow key={n.id.toString()}>
-                                            {Object.keys(n).map((key, index) => {
-                                                return (
-                                                    <TableCell key={n.id.toString() + key}> {n[key]} </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </Paper>
+                                    })}
+                                </TableBody>        
+                            </Table>
+                        </Paper>
                 </div>
             );
         }
