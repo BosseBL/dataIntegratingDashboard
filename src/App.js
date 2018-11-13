@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Dashboard from "./materialDashboard/Dashboard.js";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
+
+
 
 
 const theme = createMuiTheme({
@@ -13,7 +14,28 @@ const theme = createMuiTheme({
 
 });
 
+const Context = React.createContext();
+
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      //templates: getTemplates(),
+      //apiData = {},
+      //localData = {},
+      //currentTemplate: new Template(templates[0]),
+      //dataMap: getDataMap(),
+      // page: "REMOTE",
+      //dataQuery = localQuery,
+
+
+
+    }
+
+  }
+
+
   render() {
     return (
       <React.Fragment>

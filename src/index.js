@@ -4,8 +4,8 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 //import "bootstrap/dist/css/bootstrap.css";
-import Counters from "./components/countersComponent.jsx"
-import Dashboard from "./materialDashboard/Dashboard.js";
+//import Counters from "./components/countersComponent.jsx"
+//import Dashboard from "./materialDashboard/Dashboard.js";
 
 
 ReactDOM.render(<App/>, document.getElementById('root'));

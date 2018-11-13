@@ -1,0 +1,11 @@
+
+
+
+class TemplateManager {
+
+    constructor() {
+        templates: [];
+    }
+
+
+}
