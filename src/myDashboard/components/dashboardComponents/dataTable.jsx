@@ -22,8 +22,6 @@ const styles = theme => ({
     }
 });
 
-
-
 class DataTable extends React.Component {
     render() {
         const {classes} = this.props;

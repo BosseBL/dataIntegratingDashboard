@@ -1,25 +1,16 @@
 import React from "react";
 import Dropzone from "react-dropzone";
-import classnames from "classnames";
 import { withStyles } from '@material-ui/core/styles';
-import csv from 'csv';
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import { callbackify } from "util";
-import { Typography } from "@material-ui/core";
-
 import Grid from '@material-ui/core/Grid';
-
 import DataTable from './components/dashboardComponents/dataTable';
 import DataGraph from './components/dashboardComponents/dataGraph';
 import DataPie from './components/dashboardComponents/dataPie';
 import FileManager from './utilities/fileManager';
 
-var fm = FileManager();
+import csv from 'csv';
+
+
+//var fm = new FileManager();
 
 const styles = theme => ({
     appBarSpacer: theme.mixins.toolbar,
@@ -32,8 +23,24 @@ class DashboardArea extends React.Component {
     }
 
     onDrop = (files) => {
-        var newData = fm.readFiles(files);
-        this.setState({dataLoaded: true, data: newData});
+        if(files.length > 1) console.log("too many files");
+        var file = files[0];
+        var fr = new FileReader();
+        var newData = [];
+        fr.onload = e => {
+            var content = e.target.result;
+            csv.parse(e.target.result, (err, data) => {
+                let names = data[0];
+                for(var i = 1; i < data.length; i++) {
+                    newData.push({});
+                    for(var j = 0; j < names.length; j++) {
+                        newData[i-1][names[j]] = data[i][j]; 
+                    }
+                }
+                this.setState({dataLoaded: true, data: newData});
+            });
+        };
+        fr.readAsText(file);
     }
 
     getPieData(data, entity, field) {
@@ -47,16 +54,13 @@ class DashboardArea extends React.Component {
             }
             returnData.push({name: fieldValues[i], value: count});
         }
-        console.log(filteredData);
-        console.log(fieldValues);
-        console.log(returnData);
         return returnData;
     }
 
     render() {
         const {classes} = this.props;
 
-        if(this.state.dataLoaded) {
+        if(this.state.dataLoaded && this.state.data) {
             return (
                 <div>
                     <div className={classes.appBarSpacer}/>

@@ -66,7 +66,7 @@ class LocalDataManager {
                 dname: "type", 
                 name: "Type", 
                 type: "CATEGORY",
-                posibleValues = [
+                posibleValues: [
                     "fwd", 
                     "sp", 
                     "swp"
