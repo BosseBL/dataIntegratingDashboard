@@ -7,6 +7,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DataComponent from './dataComponent';
+import {DashboardConsumer} from '../../../dashboardContext';
+import {localDataManager} from '../../utilities/dataManager';
+import {remoteDataManager} from '../../utilities/dataManager';
+
 
 const styles = theme => ({
     table : {
@@ -23,14 +27,26 @@ const styles = theme => ({
 });
 
 class DataTable extends React.Component {
+
+    state = {
+        data: null,
+    }
+
+
+    componentWillMount() {
+        this.setState({data: localDataManager.getData()});
+    }
+
+
     render() {
         const {classes} = this.props;
         return (
+
             <DataComponent xs={12} >
                 <Table className={classes.table}>
                     <TableHead >
                         <TableRow >
-                            {Object.keys(this.props.data[0]).map(n => {
+                            {Object.keys(this.state.data[0]).map(n => {
                                 return (
                                     <TableCell key={n} className={classes.tableHeader}> {n} </TableCell>
                                 );
@@ -38,7 +54,7 @@ class DataTable extends React.Component {
                         </TableRow>
                     </TableHead>
                     <TableBody className={classes.tableBody}>
-                        {this.props.data.map(n => {
+                        {this.state.data.map(n => {
                             return (
                                 <TableRow key={n.id.toString()}>
                                     {Object.keys(n).map((key, index) => {
@@ -47,12 +63,16 @@ class DataTable extends React.Component {
                                         );
                                     })}
                                 </TableRow>
-                            );
-                        })}
-                    </TableBody>        
-                </Table>
-            </DataComponent>
-        );
+
+                                );
+                            })}
+                        </TableBody>        
+                    </Table>
+                </DataComponent>
+                );
+            
+
+        
     }
 }
 

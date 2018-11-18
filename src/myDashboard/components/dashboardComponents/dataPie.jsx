@@ -11,7 +11,7 @@ import DataComponent from './dataComponent';
 import { withStyles } from '@material-ui/core';
 import PieChart from 'recharts/lib/chart/PieChart';
 import Pie from 'recharts/lib/polar/Pie';
-
+import {localDataManager} from '../../utilities/dataManager';
 
 const styles = theme => ({
     graphLine : {
@@ -33,15 +33,29 @@ class DataPie extends React.Component {
             data: [],
             //this.state.range = props.range;
             indexKey: props.indexKey,
-            visibleData: props.data, //getData();
+            //visibleData: props.data, //getData();
 
         }
     }
-/*
-    componentDidMount() {
-        this.setState({data: this.props.data });
+
+    getPieData(entity, field) {
+        var filteredData = localDataManager.getData().filter((e) => {return e.name == entity});
+        var fieldValues = Array.from(new Set(filteredData.map((n) => {return n[field]})));
+        var returnData = [];
+        for(var i = 0; i < fieldValues.length; i++) {
+            var count = 0;
+            for(var j = 0; j < filteredData.length; j++) {
+                if(filteredData[j][field] == fieldValues[i]) count++;
+            }
+            returnData.push({name: fieldValues[i], value: count});
+        }
+        return returnData;
     }
-*/
+
+    componentWillMount() {
+        this.setState({visibleData: this.getPieData("Scania", "type")});
+    }
+
     getData() {
         var newData = this.state.data.filter((entry) => {
             return (entry[this.state.indexKey] >= this.state.range[0] && 

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import DashboardArea from '../myDashboard/dashboardArea';
-import TopBar from '../myDashboard/topBar';
-import SideBar from '../myDashboard/sideBar';
+import DashboardArea from './dashboardArea';
+import TopBar from './topBar';
+import SideBar from './sideBar';
 
 
 const styles = theme => ({
@@ -37,7 +37,6 @@ class Dashboard extends React.Component {
     const { classes } = this.props;
 
     return (
-      <React.Fragment>
         <div className={classes.root}>
           <TopBar open={this.state.open} handleDrawerOpen={this.handleDrawerOpen}/>
           <SideBar open={this.state.open} handleDrawerClose={this.handleDrawerClose}/>
@@ -45,7 +44,6 @@ class Dashboard extends React.Component {
             <DashboardArea/>
           </main>
         </div>
-      </React.Fragment>
     );
   }
 }
