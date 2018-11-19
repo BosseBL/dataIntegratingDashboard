@@ -10,16 +10,6 @@ import Legend from 'recharts/lib/component/Legend';
 import DataComponent from './dataComponent';
 import { withStyles } from '@material-ui/core';
 
-const data = [
-  { name: 'Mon', Visits: 2200, Orders: 3400 },
-  { name: 'Tue', Visits: 1280, Orders: 2398 },
-  { name: 'Wed', Visits: 5000, Orders: 4300 },
-  { name: 'Thu', Visits: 4780, Orders: 2908 },
-  { name: 'Fri', Visits: 5890, Orders: 4800 },
-  { name: 'Sat', Visits: 4390, Orders: 3800 },
-  { name: 'Sun', Visits: 4490, Orders: 4300 },
-];
-
 const styles = theme => ({
     graphLine : {
         type: "monotone", 
@@ -31,31 +21,22 @@ const styles = theme => ({
     },
 });
 
-
 class DataGraph extends React.Component {
+
+    state = {
+        indexKey: "",
+        data: [],
+        yKeys: [],
+    }
 
     constructor(props) {
         super(props);
-        this.state = {
-            data: [],
-            //this.state.range = props.range;
-            indexKey: props.indexKey,
-            visibleData: props.data, //getData();
-            yKeys: Object.keys(this.props.data[0]).filter((key) => {return key != this.props.indexKey}),
+        this.dm = props.dm;
+        this.state.indexKey = props.attributes.indexKey;
+        this.state.data = this.dm.getData().filter( (d) => {return d.name == 'Scania'})
+                                .map((n) => {return {date: n.date, volume: n.volume}});
+        this.state.yKeys = Object.keys(this.state.data[0]).filter((key) => {return key != this.state.indexKey});
 
-        }
-    }
-/*
-    componentDidMount() {
-        this.setState({data: this.props.data });
-    }
-*/
-    getData() {
-        var newData = this.state.data.filter((entry) => {
-            return (entry[this.state.indexKey] >= this.state.range[0] && 
-                entry[this.state.indexKey] <= this.state.range[1]);
-        });
-        return newData;
     }
 
     render() {
@@ -63,7 +44,7 @@ class DataGraph extends React.Component {
         return (
             <DataComponent xs={6} height={200}>
                 <ResponsiveContainer width="99%" height={320}>
-                    <LineChart data={this.state.visibleData}>
+                    <LineChart data={this.state.data}>
                         <XAxis dataKey={this.state.indexKey} />
                         <YAxis />
                         <CartesianGrid vertical={false} strokeDasharray="3 3" />

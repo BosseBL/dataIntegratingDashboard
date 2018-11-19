@@ -28,7 +28,7 @@ class App extends Component {
     super(props);
     this.state.data = null;
     this.state.templateManager = new TemplateManager();
-    //this.state.localDataManager = localDataManager;
+    this.state.localDataManager = localDataManager;
     this.state.remoteDataManager = remoteDataManager;
   }
 

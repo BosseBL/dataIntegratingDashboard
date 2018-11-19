@@ -40,6 +40,11 @@ class LocalDataManager {
     getData(fields=this.getDataFields(), filters=[], sortList=["Date"]) {
         return this.data;
     }
+
+    isLoaded() {
+        if(this.data) return true;
+        else return false; 
+    }
 }
 
 class RemoteDataManager {
