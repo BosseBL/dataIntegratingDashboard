@@ -9,17 +9,21 @@ class TemplateManager {
             components: [
                 {
                    component: DataTable,
-                   attributes: {},
+                   attributes: {
+                       companySpecific: true,
+                   },
                 }, // Table
                 {
                     component: DataGraph,
                     attributes: {
                         indexKey:"date",
+                        companySpecific: true,
                     },
                 }, // graph
                 {
                     component: DataPie,
                     attributes: {},
+                    companySpecific: true,
                 }, // pie
             ],
         },
@@ -28,7 +32,9 @@ class TemplateManager {
             components: [
                 {
                    component: DataTable,
-                   attributes: {},
+                   attributes: {
+                    companySpecific: false,
+                   },
                 }, // Table
             ],
         },

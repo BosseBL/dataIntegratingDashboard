@@ -22,6 +22,8 @@ class App extends Component {
     templateManager: null,
     localDataManager: null,
     remoteDataManager: null,
+    localDataLoaded: false,
+    source: 1,
   }
 
   constructor(props) {
@@ -32,6 +34,22 @@ class App extends Component {
     this.state.remoteDataManager = remoteDataManager;
   }
 
+  loadLocalData(files) {
+    this.state.localDataManager.loadData(
+      files, 
+      () => {this.setState({localDataLoaded: true,}) }
+    );
+  }
+
+  resetLocalData() {
+    this.setState({localDataLoaded: false, })
+  }
+
+  handleSourceChange(event, value) {
+    if(value == 0) this.setState({source: 0});
+    if(value == 1) this.setState({source: 1});
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -39,6 +57,9 @@ class App extends Component {
         <MuiThemeProvider theme={theme}>
           <DashboardProvider value = {{
               state: this.state,
+              loadLocalData: this.loadLocalData.bind(this),
+              resetLocalData: this.resetLocalData.bind(this),
+              handleSourceChange: this.handleSourceChange.bind(this),
             }}
             >
             <Dashboard/>
