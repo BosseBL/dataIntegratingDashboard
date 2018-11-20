@@ -9,9 +9,15 @@ import {localDataManager} from './myDashboard/utilities/dataManager';
 import {remoteDataManager} from './myDashboard/utilities/dataManager';
 import TemplateManager from './myDashboard/utilities/templateManager';
 
+import orange from '@material-ui/core/colors/orange';
+import blue from '@material-ui/core/colors/blue';
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
+  },
+  palette: {
+    primary: orange,
+    secondary: blue,
   },
 });
 

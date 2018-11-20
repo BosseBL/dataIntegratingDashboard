@@ -37,6 +37,10 @@ var templates = [
             }, // Table
         ],
     },
+    {
+        name: "Empty",
+        components: [],
+    },
 ];
 
 

@@ -62,10 +62,11 @@ function renderInputComponent(inputProps) {
           ref(node);
           inputRef(node);
         },
-        classes: {
-          input: classes.input,
-          
-        },
+
+      }}
+      classes={{
+        root: classes.inputRoot,
+        input: classes.inputInput,
       }}
       {...other}
     />
@@ -206,7 +207,7 @@ class SearchField extends React.Component {
           {...autosuggestProps}
           inputProps={{
             classes,
-            placeholder: 'Search',
+            placeholder: 'Search…',
             value: this.state.single,
             onChange: this.handleChange('single'),
           }}
@@ -222,7 +223,6 @@ class SearchField extends React.Component {
             </Paper>
           )}
         />
-        <div className={classes.divider} />
       </div>
     );
   }

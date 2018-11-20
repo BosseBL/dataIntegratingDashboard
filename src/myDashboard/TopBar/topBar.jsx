@@ -50,9 +50,9 @@ const styles = theme => ({
     search: {
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.common.white, 0.15),
+      backgroundColor: fade(theme.palette.common.white, 0.30),
       '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 0.25),
+        backgroundColor: fade(theme.palette.common.white, 0.40),
       },
       marginLeft: 0,
       width: '100%',
@@ -60,6 +60,7 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit,
         width: 'auto',
       },
+      
     },
     searchIcon: {
       width: theme.spacing.unit * 9,
@@ -96,9 +97,6 @@ const styles = theme => ({
 
 
 class TopBar extends React.Component {
-
-
-
     render() {
         const { classes } = this.props;
         return (
@@ -132,22 +130,20 @@ class TopBar extends React.Component {
               </Typography>
               
               <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                  <SearchIcon />
-                </div>
-                <InputBase
-                    placeholder="Search…"
-                    classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                  }}
-                  />
+                  <div className={classes.searchIcon}>
+                    <SearchIcon />
+                  </div>
+                  <SearchField/>
               </div>
+
               <Button variant="contained" className={classes.button} onClick={context.resetLocalData}>
                 Reset
               </Button>
               <Button variant="contained" color="secondary" className={classes.button}>
                 Save Template
+              </Button>
+              <Button variant="contained" color="secondary" className={classes.button}>
+                Export
               </Button>
               <Button variant="fab" disabled aria-label="Delete" className={classes.button}>
               <DeleteIcon />
@@ -172,4 +168,15 @@ export default withStyles(styles)(TopBar);
                     input: classes.inputInput,
                   }}
                   />
+
+
+
+                                <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <SearchField
+                  classes={{root: classes.inputRoot, input: classes.inputInput,}}
+                />
+              </div>
                   */
