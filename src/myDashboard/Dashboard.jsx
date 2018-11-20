@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import DashboardArea from './dashboardArea';
-import TopBar from './topBar';
-import SideBar from './sideBar';
+import DashboardArea from './Dashboard/dashboardArea';
+import TopBar from './TopBar/topBar';
+import SideBar from './SideBar/sideBar';
 
 
 const styles = theme => ({

@@ -20,7 +20,7 @@ import StarBorder from '@material-ui/icons/StarBorder';
 import List from '@material-ui/core/List';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import {DashboardConsumer} from '../dashboardContext';
+import {DashboardConsumer} from '../../dashboardContext';
 
 const styles = theme => ({
   root: {

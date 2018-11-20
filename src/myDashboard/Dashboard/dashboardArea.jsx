@@ -2,7 +2,7 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import {DashboardConsumer} from '../dashboardContext';
+import {DashboardConsumer} from '../../dashboardContext';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';

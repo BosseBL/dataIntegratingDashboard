@@ -11,7 +11,7 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
-import {DashboardConsumer} from '../dashboardContext';
+import {DashboardConsumer} from '../../dashboardContext';
 
 import SearchField from './searchField';
 

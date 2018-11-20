@@ -19,7 +19,7 @@ const styles = theme => ({
             r: 8 
         },
     },
-});
+}); 
 
 class DataGraph extends React.Component {
 

@@ -12,7 +12,6 @@ class LocalDataManager {
         var fr = new FileReader();
         var newData = [];
         fr.onload = e => {
-            var content = e.target.result;
             csv.parse(e.target.result, (err, data) => {
                 let names = data[0];
                 for(var i = 1; i < data.length; i++) {
@@ -65,10 +64,7 @@ class RemoteDataManager {
     }
 }
 
-function createLocalDataManager() {return new LocalDataManager();} 
-
 var localDataManager = new LocalDataManager();
 var remoteDataManager = new RemoteDataManager();
 
-export var localDataManager;
-export var remoteDataManager;
+export  {localDataManager, remoteDataManager};

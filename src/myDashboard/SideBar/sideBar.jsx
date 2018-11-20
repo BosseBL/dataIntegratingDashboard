@@ -12,7 +12,7 @@ import Tab from '@material-ui/core/Tab';
 import CloutOutlined from '@material-ui/icons/CloudOutlined';
 import FolderOutlined from '@material-ui/icons/FolderOutlined';
 import Paper from '@material-ui/core/Paper';
-import {DashboardConsumer} from '../dashboardContext';
+import {DashboardConsumer} from '../../dashboardContext';
 
 import BottomNavigator from './bottomNav';
 

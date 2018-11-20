@@ -1,46 +1,9 @@
-import DataTable from '../components/dashboardComponents/dataTable';
-import DataGraph from '../components/dashboardComponents/dataGraph';
-import DataPie from '../components/dashboardComponents/dataPie';
+
+import templates from './templates.js';
 
 class TemplateManager {
-    templates = [
-        {
-            name: "Default",
-            components: [
-                {
-                   component: DataTable,
-                   attributes: {
-                       companySpecific: true,
-                   },
-                }, // Table
-                {
-                    component: DataGraph,
-                    attributes: {
-                        indexKey:"date",
-                        companySpecific: true,
-                    },
-                }, // graph
-                {
-                    component: DataPie,
-                    attributes: {},
-                    companySpecific: true,
-                }, // pie
-            ],
-        },
-        {
-            name: "Only Table",
-            components: [
-                {
-                   component: DataTable,
-                   attributes: {
-                    companySpecific: false,
-                   },
-                }, // Table
-            ],
-        },
-    ];
-
     constructor() {
+        this.templates = templates;
         this.activeTemplate = this.templates[0];
     }
 

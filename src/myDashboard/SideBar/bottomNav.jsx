@@ -7,7 +7,7 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import CloutOutlined from '@material-ui/icons/CloudOutlined';
 import FolderOutlined from '@material-ui/icons/FolderOutlined';
 
-import {DashboardConsumer} from '../dashboardContext';
+import {DashboardConsumer} from '../../dashboardContext';
 const styles = {
   root: {
     width: 'auto',
