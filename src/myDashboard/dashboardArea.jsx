@@ -26,7 +26,7 @@ class DashboardArea extends React.Component {
         {(context) => {
             let dm = null;
             let tm = context.state.templateManager;
-            let template = tm.getActiveTemplate();
+            let template = tm.getTemplate(context.state.activeTemplate);
 
             if(context.state.source === 0) dm = context.state.remoteDataManager;
             else if(context.state.source === 1) {

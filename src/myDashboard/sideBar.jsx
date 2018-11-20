@@ -4,7 +4,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import { mainListItems, secondaryListItems } from '../materialDashboard/listItems';
+import MainListItems from './listItems';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -57,9 +57,11 @@ class SideBar extends React.Component {
   state = {
     value: 1,
   };
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
+
     render() {
         const { classes } = this.props;
 
@@ -76,12 +78,29 @@ class SideBar extends React.Component {
             open={this.props.open}
           >
             <div className={classes.toolbarIcon}>
+            <BottomNavigator/>
               <IconButton onClick={this.props.handleDrawerClose}>
                 <ChevronLeftIcon />
               </IconButton>
             </div>
             <Divider />
-            <Paper className={classes.tabs}>
+            <MainListItems/>
+            </Drawer>
+            );
+          }}
+          </DashboardConsumer>
+        );
+        
+    }
+    
+
+}
+
+export default withStyles(styles)(SideBar);
+
+
+/*
+<Paper className={classes.tabs}>
               <Tabs
           value={context.state.source}
           onChange={context.handleSourceChange}
@@ -94,20 +113,4 @@ class SideBar extends React.Component {
           <Tab icon={<FolderOutlined/>}  />
         </Tabs>
         </Paper>
-        <BottomNavigator/>
-            <List>{mainListItems}</List>
-            <Divider />
-            <List>{secondaryListItems}</List>
-            
-          </Drawer>
-            );
-                  }}
-                  </DashboardConsumer>
-        );
-        
-    }
-    
-
-}
-
-export default withStyles(styles)(SideBar);
+        */

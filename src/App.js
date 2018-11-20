@@ -24,6 +24,7 @@ class App extends Component {
     remoteDataManager: null,
     localDataLoaded: false,
     source: 1,
+    activeTemplate: 0,
   }
 
   constructor(props) {
@@ -50,6 +51,10 @@ class App extends Component {
     if(value == 1) this.setState({source: 1});
   }
 
+  changeActiveTemplate(index) {
+    this.setState({activeTemplate: index});
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -60,6 +65,7 @@ class App extends Component {
               loadLocalData: this.loadLocalData.bind(this),
               resetLocalData: this.resetLocalData.bind(this),
               handleSourceChange: this.handleSourceChange.bind(this),
+              changeActiveTemplate: this.changeActiveTemplate.bind(this),
             }}
             >
             <Dashboard/>

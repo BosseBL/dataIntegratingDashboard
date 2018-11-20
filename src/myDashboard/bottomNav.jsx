@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+
 import CloutOutlined from '@material-ui/icons/CloudOutlined';
 import FolderOutlined from '@material-ui/icons/FolderOutlined';
+
+import {DashboardConsumer} from '../dashboardContext';
 const styles = {
   root: {
     width: 'auto',
@@ -27,16 +28,23 @@ class BottomNavigator extends React.Component {
     const { value } = this.state;
 
     return (
+      <DashboardConsumer>
+          {(context) => {
+            return (
       <BottomNavigation
-        value={value}
-        onChange={this.handleChange}
+        value={context.state.source}
+        onChange={context.handleSourceChange}
         showLabels
         className={classes.root}
       >
         <BottomNavigationAction label="Remote" icon={<CloutOutlined />} />
         <BottomNavigationAction label="Local" icon={<FolderOutlined />} />
       </BottomNavigation>
+            );
+       }}
+       </DashboardConsumer>
     );
+    
   }
 }
 

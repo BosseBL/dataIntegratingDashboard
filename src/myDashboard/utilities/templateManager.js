@@ -45,7 +45,10 @@ class TemplateManager {
     }
 
     getActiveTemplate() {return this.activeTemplate; }
-    getTemplate(name) {return this.templates.filter((t) => {return t.name === name});}
+    getTemplate(name) {
+        if(typeof name === 'number') return this.templates[name];
+        else if(typeof name === 'string') return this.templates.filter((t) => {return t.name === name});
+    }
     getTemplates() {return this.templates;}
     getTemplateNames() {return this.templates.map((t) => {return t.name});}
 }
