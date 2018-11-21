@@ -73,51 +73,9 @@ function renderInputComponent(inputProps) {
   );
 }
 
-function renderSuggestion(suggestion, { query, isHighlighted }) {
-  const matches = match(suggestion.label, query);
-  const parts = parse(suggestion.label, matches);
 
-  return (
-    <MenuItem selected={isHighlighted} component="div">
-      <div>
-        {parts.map((part, index) => {
-          return part.highlight ? (
-            <span key={String(index)} style={{ fontWeight: 500 }}>
-              {part.text}
-            </span>
-          ) : (
-            <strong key={String(index)} style={{ fontWeight: 300 }}>
-              {part.text}
-            </strong>
-          );
-        })}
-      </div>
-    </MenuItem>
-  );
-}
 
-function getSuggestions(value) {
-  const inputValue = deburr(value.trim()).toLowerCase();
-  const inputLength = inputValue.length;
-  let count = 0;
 
-  return inputLength === 0
-    ? []
-    : suggestions.filter(suggestion => {
-        const keep =
-          count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
-
-        if (keep) {
-          count += 1;
-        }
-
-        return keep;
-      });
-}
-
-function getSuggestionValue(suggestion) {
-  return suggestion.label;
-}
 
 const styles = theme => ({
   root: {
@@ -169,11 +127,64 @@ class SearchField extends React.Component {
     single: '',
     popper: '',
     suggestions: [],
+    companyList: [],
   };
 
+  constructor(props) {
+    super(props);
+    this.state.companyList = props.companyList;
+  }
+
+  renderSuggestion(suggestion, { query, isHighlighted }) {
+    const matches = match(suggestion, query);
+    const parts = parse(suggestion, matches);
+  
+    return (
+      <MenuItem selected={isHighlighted} component="div">
+        <div>
+          {parts.map((part, index) => {
+            return part.highlight ? (
+              <span key={String(index)} style={{ fontWeight: 500 }}>
+                {part.text}
+              </span>
+            ) : (
+              <strong key={String(index)} style={{ fontWeight: 300 }}>
+                {part.text}
+              </strong>
+            );
+          })}
+        </div>
+      </MenuItem>
+    );
+  }
+
+  getSuggestions(value) {
+    const inputValue = deburr(value.trim()).toLowerCase();
+    const inputLength = inputValue.length;
+    let count = 0;
+  
+    return inputLength === 0
+      ? []
+      : this.props.companyList.filter(suggestion => {
+          const keep =
+            count < 5 && suggestion.slice(0, inputLength).toLowerCase() === inputValue;
+  
+          if (keep) {
+            count += 1;
+          }
+  
+          return keep;
+        });
+  }
+
+  getSuggestionValue(suggestion) {
+    console.log(suggestion);
+    return suggestion;
+  }
+  
   handleSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      suggestions: getSuggestions(value),
+      suggestions: this.getSuggestions(value),
     });
   };
 
@@ -197,8 +208,8 @@ class SearchField extends React.Component {
       suggestions: this.state.suggestions,
       onSuggestionsFetchRequested: this.handleSuggestionsFetchRequested,
       onSuggestionsClearRequested: this.handleSuggestionsClearRequested,
-      getSuggestionValue,
-      renderSuggestion,
+      getSuggestionValue: this.getSuggestionValue,
+      renderSuggestion: this.renderSuggestion,
     };
 
     return (

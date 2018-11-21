@@ -42,8 +42,8 @@ class DataGraph extends React.Component {
     render() {
         const {classes} = this.props;
         return (
-            <DataComponent xs={6} height={200}>
-                <ResponsiveContainer width="99%" height={320}>
+            <DataComponent xs={6}>
+                <ResponsiveContainer width="98%" height="98%">
                     <LineChart data={this.state.data}>
                         <XAxis dataKey={this.state.indexKey} />
                         <YAxis />

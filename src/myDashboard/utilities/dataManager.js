@@ -27,6 +27,10 @@ class LocalDataManager {
         fr.readAsText(file);
     }
 
+    resetData() {
+        this.data = [];
+    }
+
     setData(d) {
         this.data = d;
     }
@@ -61,6 +65,12 @@ class RemoteDataManager {
         return Array.from(new Set(this.getData(["name"], [], []).map((e) => {return e.name}))).sort();
     }
     getData(fields=this.getDataFields(), filters=[], sortList=["Date"]) {
+        return [
+            {name: "alfa"},
+            {name: "beta"},
+            {name: "gama"},
+            {name: "delta"},
+        ];
     }
 }
 

@@ -12,13 +12,17 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {DashboardConsumer} from '../../dashboardContext';
-
+import InsertDriverFile from '@material-ui/icons/InsertDriveFile';
 import SearchField from './searchField';
+import logo from './swedbankLogo2.jpg';
 
 const drawerWidth = 240;
 
 
 const styles = theme => ({
+    root: {
+      display: 'flex',
+    },
     toolbar: {
       paddingRight: 24, // keep right padding when drawer closed
     },
@@ -28,6 +32,8 @@ const styles = theme => ({
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
+      background: 'linear-gradient(to right, #ffffff 30%, #fa7f25 30%, #fdbe13)',
+      //background: 'linear-gradient(to right, #ffffff, #ffffff, #fa7f25, #fa7f25, #fdbe13)',
     },
     appBarShift: {
       marginLeft: drawerWidth,
@@ -92,7 +98,6 @@ const styles = theme => ({
     button: {
       margin: theme.spacing.unit,
     },
-
   });
 
 
@@ -103,6 +108,7 @@ class TopBar extends React.Component {
           <DashboardConsumer>
           {(context) => {
             return (
+              <div className={classes.root}>
         <AppBar
             position="absolute"
             className={classNames(classes.appBar, this.props.open && classes.appBarShift)}
@@ -119,6 +125,7 @@ class TopBar extends React.Component {
               >
                 <MenuIcon />
               </IconButton>
+              <img src={logo} noWrap/>
               <Typography
                 component="h1"
                 variant="h6"
@@ -126,14 +133,15 @@ class TopBar extends React.Component {
                 noWrap
                 className={classes.title}
               >
-                Dashboard
+              Dashboard
               </Typography>
+              
               
               <div className={classes.search}>
                   <div className={classes.searchIcon}>
                     <SearchIcon />
                   </div>
-                  <SearchField/>
+                  <SearchField companyList={context.state.companyList}/>
               </div>
 
               <Button variant="contained" className={classes.button} onClick={context.resetLocalData}>
@@ -150,6 +158,7 @@ class TopBar extends React.Component {
               </Button>
             </Toolbar>
           </AppBar>
+          </div>
             );
                   }}
                   </DashboardConsumer>

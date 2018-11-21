@@ -50,17 +50,15 @@ class DataPie extends React.Component {
     render() {
         const {classes} = this.props;
         return (
-            <DataComponent xs={6} height={200}>
-                <ResponsiveContainer width="99%" height={320}>
-                    <PieChart width={200} height={200}>
-                        <Pie 
+            <DataComponent xs={6} >
+                <ResponsiveContainer width="98%" height="98%" >
+                    <PieChart >
+                        <Pie
                             data={this.state.data} 
                             dataKey="value" 
-                            nameKey="name" 
-                            cx={200} 
-                            cy={200} 
-                            outerRadius={60} 
-                            fill="#8884d8" 
+                            nameKey="name"  
+                            outerRadius="50%" 
+                            fill="#fa7f25" 
                             label
                         />
                     </PieChart>

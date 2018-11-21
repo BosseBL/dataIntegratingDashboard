@@ -11,6 +11,7 @@ import TemplateManager from './myDashboard/utilities/templateManager';
 
 import orange from '@material-ui/core/colors/orange';
 import blue from '@material-ui/core/colors/blue';
+import { runInThisContext } from 'vm';
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -31,6 +32,7 @@ class App extends Component {
     localDataLoaded: false,
     source: 1,
     activeTemplate: 0,
+    companyList: [],
   }
 
   constructor(props) {
@@ -39,22 +41,30 @@ class App extends Component {
     this.state.templateManager = new TemplateManager();
     this.state.localDataManager = localDataManager;
     this.state.remoteDataManager = remoteDataManager;
+    this.state.companyList = (this.state.source===1 ? localDataManager.getNames() : remoteDataManager.getNames());
   }
 
   loadLocalData(files) {
     this.state.localDataManager.loadData(
       files, 
-      () => {this.setState({localDataLoaded: true,}) }
+      () => {this.setState({localDataLoaded: true, companyList: localDataManager.getNames()}) }
     );
   }
 
+  // reset button needs to be revised.
   resetLocalData() {
-    this.setState({localDataLoaded: false, })
+    this.setState({localDataLoaded: false})
+    if(this.state.source === 1) this.setState({companyList: []});
+    this.state.localDataManager.resetData();
   }
 
   handleSourceChange(event, value) {
-    if(value == 0) this.setState({source: 0});
-    if(value == 1) this.setState({source: 1});
+    if(value == 0) {
+      this.setState({source: 0, companyList: remoteDataManager.getNames()});
+    }
+    if(value == 1) {
+      this.setState({source: 1, companyList: localDataManager.getNames()});
+    }
   }
 
   changeActiveTemplate(index) {
