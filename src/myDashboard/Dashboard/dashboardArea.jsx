@@ -14,6 +14,8 @@ const styles = theme => ({
         bottom: theme.spacing.unit * 2,
         left: theme.spacing.unit * 2,
       },
+    dropZone: {
+    },
 });
 
 class DashboardArea extends React.Component {
@@ -35,7 +37,7 @@ class DashboardArea extends React.Component {
                     return (
                         <div>
                             <div className={classes.appBarSpacer}/>
-                            <Dropzone onDrop={(files) => {context.loadLocalData(files)} }>
+                            <Dropzone  onDrop={(files) => {context.loadLocalData(files)} }>
                                 drop some files 
                             </Dropzone>
                         </div>

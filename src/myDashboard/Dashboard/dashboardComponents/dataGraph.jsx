@@ -9,6 +9,8 @@ import Tooltip from 'recharts/lib/component/Tooltip';
 import Legend from 'recharts/lib/component/Legend';
 import DataComponent from './dataComponent';
 import { withStyles } from '@material-ui/core';
+import BarChart from 'recharts/lib/chart/BarChart';
+import Bar from 'recharts/lib/cartesian/Bar';
 
 const styles = theme => ({
     graphLine : {
@@ -44,18 +46,14 @@ class DataGraph extends React.Component {
         return (
             <DataComponent xs={6}>
                 <ResponsiveContainer width="98%" height="98%">
-                    <LineChart data={this.state.data}>
+                    <BarChart data={this.state.data}>
                         <XAxis dataKey={this.state.indexKey} />
                         <YAxis />
                         <CartesianGrid vertical={false} strokeDasharray="3 3" />
                         <Tooltip />
                         <Legend />
-                            {this.state.yKeys.map(n => {
-                                return (
-                                    <Line key={n} dataKey={n} className={classes.graphLine}/>
-                                );
-                            })}
-                    </LineChart>
+                            <Bar dataKey="volume" className={classes.graphLine}/>
+                    </BarChart>
                 </ResponsiveContainer>
             </DataComponent>
         );
