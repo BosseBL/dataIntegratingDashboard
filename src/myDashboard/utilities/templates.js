@@ -1,6 +1,8 @@
 import DataTable from '../Dashboard/dashboardComponents/dataTable';
 import DataGraph from '../Dashboard/dashboardComponents/dataGraph';
 import DataPie from '../Dashboard/dashboardComponents/dataPie';
+import DataBar from '../Dashboard/dashboardComponents/dataBar';
+import dataMap from './dataMap';
 
 var templates = [
     {
@@ -15,14 +17,23 @@ var templates = [
             {
                 component: DataGraph,
                 attributes: {
-                    indexKey:"date",
+                    indexKey:"test",
                     companySpecific: true,
+                    type: "Bar",
                 },
             }, // graph
             {
                 component: DataPie,
                 attributes: {},
                 companySpecific: true,
+            }, // pie
+            {
+                component: DataBar,
+                attributes: {
+                    indexKey: "date",
+                    companySpecific: true,
+                    valueKey:"volume",
+                },
             }, // pie
         ],
     },

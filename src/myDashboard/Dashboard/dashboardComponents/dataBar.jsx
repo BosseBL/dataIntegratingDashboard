@@ -24,7 +24,7 @@ const styles = theme => ({
     },
 }); 
 
-class DataGraph extends React.Component {
+class DataBar extends React.Component {
 
     state = {
         indexKey: "",
@@ -47,19 +47,19 @@ class DataGraph extends React.Component {
         return (
             <DataComponent xs={6}>
                 <ResponsiveContainer width="98%" height="98%">
-                    <LineChart data={this.state.data}>
-                        <XAxis dataKey={this.state.indexKey} type="number" allowDataOverflow={true}/>
+                    <BarChart data={this.state.data}>
+                        <XAxis dataKey={this.state.indexKey}/>
                         <YAxis />
                         <CartesianGrid vertical={false} strokeDasharray="3 3" />
                         <Tooltip />
                         <Legend />
-                        <Line dataKey="volume" className={classes.graphLine}/>
+                        <Bar dataKey="volume" className={classes.graphLine}/>
                         <Brush height={15}/>
-                    </LineChart>
+                    </BarChart>
                 </ResponsiveContainer>
             </DataComponent>
         );
     }
 }
 
-export default withStyles(styles)(DataGraph);
+export default withStyles(styles)(DataBar);

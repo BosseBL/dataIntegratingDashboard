@@ -57,10 +57,28 @@ class DataPie extends React.Component {
                             data={this.state.data} 
                             dataKey="value" 
                             nameKey="name"  
+                            outerRadius="75%" 
+                            fill="#fa7f00" 
+                            label
+                        />
+                        <Pie
+                            data={this.state.data} 
+                            dataKey="value" 
+                            nameKey="name"  
                             outerRadius="50%" 
                             fill="#fa7f25" 
                             label
                         />
+                        <Pie
+                            data={this.state.data} 
+                            dataKey="value" 
+                            nameKey="name"  
+                            outerRadius="25%" 
+                            fill="#fa7f50" 
+                            label
+                        />
+                        <Legend/>
+                        <Tooltip/>
                     </PieChart>
                 </ResponsiveContainer>
             </DataComponent>
