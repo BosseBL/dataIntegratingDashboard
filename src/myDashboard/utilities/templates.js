@@ -32,7 +32,7 @@ var templates = [
                 attributes: {
                     indexKey: "date",
                     companySpecific: true,
-                    valueKey:"volume",
+                    valueKey:"riskAmount",
                 },
             }, // pie
         ],
@@ -51,6 +51,17 @@ var templates = [
     {
         name: "Empty",
         components: [],
+    },
+    {
+        name: "Test",
+        components: [
+            {
+                //component: DataTest,
+                attributes: {
+                    companySpecific: true,
+                },
+            },
+        ],
     },
 ];
 

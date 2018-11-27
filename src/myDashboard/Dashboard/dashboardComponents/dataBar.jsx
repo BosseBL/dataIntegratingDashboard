@@ -36,8 +36,8 @@ class DataBar extends React.Component {
         super(props);
         this.dm = props.dm;
         this.state.indexKey = props.attributes.indexKey;
-        this.state.data = this.dm.getData().filter( (d) => {return d.name == 'Scania'})
-                                .map((n) => {return {test: n.test, volume: n.volume}});
+        this.state.data = this.dm.getData().filter( (d) => {return d.cptyName == 'Scania'})
+                                .map((n) => {return {date: n.date, riskAmount: n.riskAmount}});
         this.state.yKeys = Object.keys(this.state.data[0]).filter((key) => {return key != this.state.indexKey});
 
     }
@@ -53,7 +53,7 @@ class DataBar extends React.Component {
                         <CartesianGrid vertical={false} strokeDasharray="3 3" />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="volume" className={classes.graphLine}/>
+                        <Bar dataKey="riskAmount" className={classes.graphLine}/>
                         <Brush height={15}/>
                     </BarChart>
                 </ResponsiveContainer>

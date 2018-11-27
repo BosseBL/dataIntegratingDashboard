@@ -36,8 +36,8 @@ class DataGraph extends React.Component {
         super(props);
         this.dm = props.dm;
         this.state.indexKey = props.attributes.indexKey;
-        this.state.data = this.dm.getData().filter( (d) => {return d.name == 'Scania'})
-                                .map((n) => {return {test: n.test, volume: n.volume}});
+        this.state.data = this.dm.getData().filter( (d) => {return d.cptyName == 'Scania'})
+                                .map((n) => {return {test: n.test, riskAmount: n.riskAmount}});
         this.state.yKeys = Object.keys(this.state.data[0]).filter((key) => {return key != this.state.indexKey});
 
     }
@@ -53,7 +53,7 @@ class DataGraph extends React.Component {
                         <CartesianGrid vertical={false} strokeDasharray="3 3" />
                         <Tooltip />
                         <Legend />
-                        <Line dataKey="volume" className={classes.graphLine}/>
+                        <Line dataKey="riskAmount" className={classes.graphLine}/>
                         <Brush height={15}/>
                     </LineChart>
                 </ResponsiveContainer>

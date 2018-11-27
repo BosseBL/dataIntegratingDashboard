@@ -34,7 +34,7 @@ class DataPie extends React.Component {
     }
 
     getPieData(entity, field) {
-        var filteredData = this.dm.getData().filter((e) => {return e.name == entity});
+        var filteredData = this.dm.getData().filter((e) => {return e.cptyName == entity});
         var fieldValues = Array.from(new Set(filteredData.map((n) => {return n[field]})));
         var returnData = [];
         for(var i = 0; i < fieldValues.length; i++) {

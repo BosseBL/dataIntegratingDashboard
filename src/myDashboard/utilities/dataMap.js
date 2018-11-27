@@ -8,26 +8,27 @@ const dataMap = [
         get: (v) => {return v}
     },
     {
-        dname: "name", 
+        dname: "cptyName", 
         name: "Name", 
         type: "ENTITY-IDENTIFIER", 
         get: (v) => {return v}
+        // ”: ö, „: ä, †: å
     },
     {
-        dname: "pair", 
-        name: "From", 
+        dname: "Pair", 
+        name: "ccy1", 
         type: "CATEGORY",
         possibleValues: [
-            "USD", "SEK", "EUR",
+            "USD", "SEK", "EUR", "NOK", "DDK",
         ],
         get: (v) => {return v.substring(0,3)},
     },
     {
-        dname: "pair",
-        name: "Too", 
+        dname: "Pair",
+        name: "ccy2", 
         type: "CATEGORY",
         posibleValues: [
-            "USD", "SEK", "EUR",
+            "USD", "SEK", "EUR", "NOK", "DDK",
         ],
         get: (v) => {return v.substring(3, 5)},
     },
@@ -35,18 +36,29 @@ const dataMap = [
         dname: "date", 
         name: "Date", 
         type: "TIME",
+        get: (v) => {return v},
+    },
+    // yearmonth, month, time, 
+    {
+        dname: "channel",
+        name: "Channel",
+        type: "CATHEGORY",
+        possibleValues: [
+            "QUASAR",
+            "BLOOMBERG",
+        ],
     },
     {
         dname: "side", 
         name: "Side", 
         type: "CATEGORY", 
         posibleValues: [
-            "buy", 
-            "sell",
+            "Buy", 
+            "Sell",
         ],
     },
     {
-        dname: "volume", 
+        dname: "riskAmount", 
         name: "Volume", 
         type: "NUMBER",
     },
@@ -64,20 +76,15 @@ const dataMap = [
         name: "Type", 
         type: "CATEGORY",
         posibleValues: [
-            "fwd", 
-            "sp", 
-            "swp"
+            "FWD", 
+            "SP", 
+            "SWAP",
         ],
     },
     {
         dname: "info", 
         name: "Info", 
-        type: "CATEGORY",
-        possibleValues: [
-            "",
-            "RULE",
-            "CANCELLED",
-        ], 
+        type: "TEXT",
     },
 ];
 
