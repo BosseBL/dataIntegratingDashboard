@@ -1,5 +1,7 @@
 import dataMap from './dataMap';
 import csv from 'csv';
+import moment from 'moment';
+
 class LocalDataManager {
     constructor() {
         this.data = [];
@@ -40,8 +42,43 @@ class LocalDataManager {
     getNames() {
         return Array.from(new Set(this.getData(["name"], [], []).map((e) => {return e.name}))).sort();
     }
-    getData(fields=this.getDataFields(), filters=[], sortList=["Date"]) {
+    getData(fields=this.getDataFields(), filters={}, sortList=["Date"]) {
         return this.data;
+    }
+
+    getDataFilter(fields=this.getDataFields(), filters={}, sortList=["date"], interval={}) {
+        var result = [];
+
+        // fields
+        for(let d in this.data) {
+            let e = {};
+            for(let f in fields) {
+                e[fields[f]] = this.data[d][fields[f]];
+            }
+            result.push(e);
+        }
+
+        console.log(result);
+
+        // filters (if category filter, if number or time, interval)
+        for(let f in filters) {
+            result = result.filter(d => {return d[f] == filters[f]});
+        }
+
+        console.log(result);
+
+        // sort (if date)
+        for(let i in interval) {
+            result.filter(d => {return moment(d.date) > moment(interval.start) && moment(d.date) < moment(interval.end)});
+        }
+        
+        console.log(result);
+
+        result.sort((a, b) => {return moment(a.date) - moment(b.date)});
+
+        console.log(result);
+
+        return result;
     }
 
     isLoaded() {

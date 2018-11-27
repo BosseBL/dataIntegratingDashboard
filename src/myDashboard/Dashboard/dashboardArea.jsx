@@ -14,8 +14,6 @@ const styles = theme => ({
         bottom: theme.spacing.unit * 2,
         left: theme.spacing.unit * 2,
       },
-    dropZone: {
-    },
 });
 
 class DashboardArea extends React.Component {
@@ -53,7 +51,7 @@ class DashboardArea extends React.Component {
                             <Grid container spacing={16}>
                             {template.components.map((e, i) => {
                                 return(
-                                    <e.component key={i} dm={dm} attributes={e.attributes}/>
+                                    <e.component key={i} dm={dm} attributes={e.attributes} companyName="Scania"/>
                                 );
                             })}
                             </Grid>

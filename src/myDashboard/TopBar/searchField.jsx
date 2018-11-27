@@ -73,10 +73,6 @@ function renderInputComponent(inputProps) {
   );
 }
 
-
-
-
-
 const styles = theme => ({
   root: {
     flexGrow: 1,

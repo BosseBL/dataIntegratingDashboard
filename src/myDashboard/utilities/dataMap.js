@@ -1,4 +1,4 @@
-
+import moment from 'moment';
 
 const dataMap = [
     {
@@ -36,7 +36,7 @@ const dataMap = [
         dname: "date", 
         name: "Date", 
         type: "TIME",
-        get: (v) => {return v},
+        get: (v) => {return moment(v)},
     },
     // yearmonth, month, time, 
     {
@@ -47,6 +47,7 @@ const dataMap = [
             "QUASAR",
             "BLOOMBERG",
         ],
+        get: (v) => {return v},
     },
     {
         dname: "side", 
@@ -56,11 +57,13 @@ const dataMap = [
             "Buy", 
             "Sell",
         ],
+        get: (v) => {return v},
     },
     {
         dname: "riskAmount", 
         name: "Volume", 
         type: "NUMBER",
+        get: (v) => {return v},
     },
     {
         dname: "status", 
@@ -70,6 +73,7 @@ const dataMap = [
             "OD", 
             "OC"
         ],
+        get: (v) => {return v},
     },
     {
         dname: "type", 
@@ -80,11 +84,13 @@ const dataMap = [
             "SP", 
             "SWAP",
         ],
+        get: (v) => {return v},
     },
     {
         dname: "info", 
         name: "Info", 
         type: "TEXT",
+        get: (v) => {return v},
     },
 ];
 

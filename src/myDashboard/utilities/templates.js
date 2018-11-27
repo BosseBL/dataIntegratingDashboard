@@ -2,6 +2,7 @@ import DataTable from '../Dashboard/dashboardComponents/dataTable';
 import DataGraph from '../Dashboard/dashboardComponents/dataGraph';
 import DataPie from '../Dashboard/dashboardComponents/dataPie';
 import DataBar from '../Dashboard/dashboardComponents/dataBar';
+import DataTest from '../Dashboard/dashboardComponents/dataTest';
 import dataMap from './dataMap';
 
 var templates = [
@@ -56,9 +57,15 @@ var templates = [
         name: "Test",
         components: [
             {
-                //component: DataTest,
+                component: DataTest,
                 attributes: {
+                    indexKey: "date",
                     companySpecific: true,
+                    valueKey:"riskAmount",
+                    interval: ["2018-01-01", "2019-01-01"],
+                    filter: {
+                        status: "OC",
+                    },
                 },
             },
         ],

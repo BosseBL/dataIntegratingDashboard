@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core';
 import BarChart from 'recharts/lib/chart/BarChart';
 import Bar from 'recharts/lib/cartesian/Bar';
 import Brush from 'recharts/lib/cartesian/Brush';
+import moment from 'moment';
 
 const styles = theme => ({
     graphLine : {

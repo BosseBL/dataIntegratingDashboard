@@ -33,6 +33,7 @@ class App extends Component {
     source: 1,
     activeTemplate: 0,
     companyList: [],
+    activeCompany: "",
   }
 
   constructor(props) {
