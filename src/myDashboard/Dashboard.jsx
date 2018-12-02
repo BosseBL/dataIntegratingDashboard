@@ -41,7 +41,7 @@ class Dashboard extends React.Component {
           <TopBar open={this.state.open} handleDrawerOpen={this.handleDrawerOpen}/>
           <SideBar open={this.state.open} handleDrawerClose={this.handleDrawerClose}/>
           <main className={classes.content}>
-            <DashboardArea source="LOCAL"/>
+            <DashboardArea activeCompany={this.props.activeCompany} source="LOCAL"/>
           </main>
         </div>
     );

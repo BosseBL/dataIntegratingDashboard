@@ -12,6 +12,10 @@ import Bar from 'recharts/lib/cartesian/Bar';
 import Brush from 'recharts/lib/cartesian/Brush';
 import moment from 'moment';
 
+const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
 const styles = theme => ({
     graphLine : {
         type: "monotone", 
@@ -29,6 +33,7 @@ class DataTest extends React.Component {
         indexKey: "",
         data: [],
         yKeys: [],
+        companyName: "",
     }
 
     constructor(props) {
@@ -39,39 +44,66 @@ class DataTest extends React.Component {
         this.state.interval = props.attributes.interval;
         this.state.companyName = props.companyName;
         this.state.filter = props.attributes.filter;
-        this.state.filter.cptyName = this.props.companyName;
-        this.state.data = this.dm.getDataFilter(
-            [this.state.indexKey, this.state.valueKey].concat(Object.keys(this.state.filter)),
-            this.state.filter,
-            [this.state.valueKey],
-            this.state.interval,
-        );
+        this.state.filter.cptyName = props.companyName;
+        this.state.data = this.dm.getDataFilter(            
+                [this.state.indexKey, this.state.valueKey].concat(Object.keys(this.state.filter)),
+                this.state.filter,
+                [this.state.valueKey],
+                this.state.interval,
+            );
+        console.log(this.data);
+    }
 
-
-        /*
-        this.state.data = this.dm.getData().filter( (d) => {return d.cptyName == 'Scania'})
-                                .map((n) => {return {date: n.date, riskAmount: n.riskAmount}});
-        this.state.yKeys = Object.keys(this.state.data[0]).filter((key) => {return key != this.state.indexKey});
-        */
+    componentWillReceiveProps(nextProp) {
+        console.log("new prop");
+        if(nextProp.companyName != this.state.companyName) {
+            let newFilter = nextProp.attributes.filter;
+            newFilter.cptyName = nextProp.companyName;
+            let newData = this.dm.getDataFilter(            
+                [this.state.indexKey, this.state.valueKey].concat(Object.keys(newFilter)),
+                newFilter,
+                [this.state.valueKey],
+                this.state.interval,
+            );
+            this.setState({companyName: nextProp.companyName, filter: newFilter, data: newData });
+            console.log("changed prop");
+        }
     }
 
     render() {
         const {classes} = this.props;
+
+        if(this.state.companyName != "") {
         return (
             <DataComponent xs={6}>
                 <ResponsiveContainer width="98%" height="98%">
                     <BarChart data={this.state.data}>
-                        <XAxis dataKey={this.state.indexKey}/>
-                        <YAxis />
+                        <XAxis 
+                            dataKey={this.state.indexKey}
+                            tickFormatter={e => {
+                                var val = months[moment(e).month()];
+                                if(val == undefined) return "";
+                                else return val}}
+                            />
+                        <YAxis 
+                            unit="M SEK"
+                            tickFormatter={e => {return e/1000000;}}
+                            padding={{left : 100}}/>
                         <CartesianGrid vertical={false} strokeDasharray="3 3" />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="riskAmount" className={classes.graphLine}/>
+                        <Bar dataKey={this.state.valueKey} className={classes.graphLine}/>
                         <Brush height={15}/>
                     </BarChart>
                 </ResponsiveContainer>
             </DataComponent>
         );
+        }
+        else {
+            return (
+                <DataComponent xs={6}></DataComponent>
+            );
+        }
     }
 }
 

@@ -15,6 +15,7 @@ class LocalDataManager {
         var newData = [];
         fr.onload = e => {
             csv.parse(e.target.result, (err, data) => {
+                console.log(e);
                 let names = data[0];
                 for(var i = 1; i < data.length; i++) {
                     newData.push({});
@@ -40,7 +41,7 @@ class LocalDataManager {
         return this.dataMap.map((e) => {return e.name});
     }
     getNames() {
-        return Array.from(new Set(this.getData(["name"], [], []).map((e) => {return e.name}))).sort();
+        return Array.from(new Set(this.getData(["cptyName"], [], []).map((e) => {return e.cptyName}))).sort();
     }
     getData(fields=this.getDataFields(), filters={}, sortList=["Date"]) {
         return this.data;

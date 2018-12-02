@@ -18,6 +18,7 @@ const styles = theme => ({
 
 class DashboardArea extends React.Component {
 
+
     render() {
         const {classes} = this.props;
 
@@ -51,7 +52,7 @@ class DashboardArea extends React.Component {
                             <Grid container spacing={16}>
                             {template.components.map((e, i) => {
                                 return(
-                                    <e.component key={i} dm={dm} attributes={e.attributes} companyName="Scania"/>
+                                    <e.component key={i} dm={dm} attributes={e.attributes} companyName={this.props.activeCompany}/>
                                 );
                             })}
                             </Grid>

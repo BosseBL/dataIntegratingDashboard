@@ -9,7 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Popper from '@material-ui/core/Popper';
 import { withStyles } from '@material-ui/core/styles';
-
+import {DashboardConsumer} from '../../dashboardContext';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 
@@ -51,27 +51,7 @@ const suggestions = [
   { label: 'Brunei Darussalam' },
 ];
 
-function renderInputComponent(inputProps) {
-  const { classes, inputRef = () => {}, ref, ...other } = inputProps;
 
-  return (
-    <InputBase
-      fullWidth
-      InputProps={{
-        inputRef: node => {
-          ref(node);
-          inputRef(node);
-        },
-
-      }}
-      classes={{
-        root: classes.inputRoot,
-        input: classes.inputInput,
-      }}
-      {...other}
-    />
-  );
-}
 
 const styles = theme => ({
   root: {
@@ -154,6 +134,41 @@ class SearchField extends React.Component {
     );
   }
 
+  renderInputComponent(inputProps) {
+    const { classes, inputRef = () => {}, ref, value, ...other } = inputProps;
+  
+    return (
+      <DashboardConsumer>
+      {(context) => {
+        return (
+      <InputBase
+        fullWidth
+        InputProps={{
+          inputRef: node => {
+            ref(node);
+            inputRef(node);
+          },
+  
+        }}
+        classes={{
+          root: classes.inputRoot,
+          input: classes.inputInput,
+        }}
+        {...other}
+        onKeyPress={(target) => {if(target.charCode==13) {context.handleSearch(value)};}}
+      />
+    );
+      }}
+    </DashboardConsumer>
+    );
+  }
+
+  /*
+  onSuggestionSelected(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) {
+    this.setState({popper: suggestionValue});
+  }
+  */
+
   getSuggestions(value) {
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
@@ -174,7 +189,6 @@ class SearchField extends React.Component {
   }
 
   getSuggestionValue(suggestion) {
-    console.log(suggestion);
     return suggestion;
   }
   
@@ -200,7 +214,7 @@ class SearchField extends React.Component {
     const { classes } = this.props;
 
     const autosuggestProps = {
-      renderInputComponent,
+      renderInputComponent: this.renderInputComponent,
       suggestions: this.state.suggestions,
       onSuggestionsFetchRequested: this.handleSuggestionsFetchRequested,
       onSuggestionsClearRequested: this.handleSuggestionsClearRequested,

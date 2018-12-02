@@ -72,6 +72,14 @@ class App extends Component {
     this.setState({activeTemplate: index});
   }
 
+  handleSearch(target) {
+    console.log(target);
+    if(this.state.companyList.includes(target)) {
+      this.setState({activeCompany: target});
+      console.log("changed");
+  }
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -83,9 +91,10 @@ class App extends Component {
               resetLocalData: this.resetLocalData.bind(this),
               handleSourceChange: this.handleSourceChange.bind(this),
               changeActiveTemplate: this.changeActiveTemplate.bind(this),
+              handleSearch: this.handleSearch.bind(this),
             }}
             >
-            <Dashboard/>
+            <Dashboard activeCompany={this.state.activeCompany}/>
           </DashboardProvider>
         </MuiThemeProvider>
       </React.Fragment>
