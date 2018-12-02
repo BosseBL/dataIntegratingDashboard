@@ -31,7 +31,7 @@ class App extends Component {
     remoteDataManager: null,
     localDataLoaded: false,
     source: 1,
-    activeTemplate: 0,
+    activeTemplate: 3,
     companyList: [],
     activeCompany: "",
   }

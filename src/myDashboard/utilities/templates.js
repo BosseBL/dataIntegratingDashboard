@@ -4,6 +4,7 @@ import DataPie from '../Dashboard/dashboardComponents/dataPie';
 import DataBar from '../Dashboard/dashboardComponents/dataBar';
 import DataTest from '../Dashboard/dashboardComponents/dataTest';
 import dataMap from './dataMap';
+import TestPie from '../Dashboard/dashboardComponents/testPie';
 
 var templates = [
     {
@@ -66,6 +67,17 @@ var templates = [
                     filter: {
                         status: "OC",
                     },
+                    aggregation: "sum",
+                },
+            },
+            {
+                component: TestPie,
+                attributes: {
+                    indexKey: ["status", "type"],
+                    filter: {},
+                    companySpecific: true,
+                    valueKey: "riskAmount",
+                    type: "sum",
                 },
             },
         ],

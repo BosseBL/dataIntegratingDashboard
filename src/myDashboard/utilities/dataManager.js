@@ -59,27 +59,58 @@ class LocalDataManager {
             result.push(e);
         }
 
-        console.log(result);
-
         // filters (if category filter, if number or time, interval)
         for(let f in filters) {
             result = result.filter(d => {return d[f] == filters[f]});
         }
 
-        console.log(result);
-
         // sort (if date)
         for(let i in interval) {
             result.filter(d => {return moment(d.date) > moment(interval.start) && moment(d.date) < moment(interval.end)});
         }
-        
-        console.log(result);
 
         result.sort((a, b) => {return moment(a.date) - moment(b.date)});
 
-        console.log(result);
-
         return result;
+    }
+
+    getDataAggregate(fields, valueIndex, filters={}, type) {
+        var results = [];
+
+        for(let d in this.data) {
+            let e = {};
+            for(let f in fields) {
+                e[fields[f]] = this.data[d][fields[f]];
+            }
+            results.push(e);
+        }
+
+        for(let f in filters) {
+            results = results.filter(d => {return d[f] == filters[f]});
+        }
+
+        var results2 = [];
+
+        while(results) {
+            var e = results.pop();
+            var counter = 0;
+            for(let i = results.length-1; i >= 0; i--) {
+                if((e) => {
+                    for(let j in fields) {
+                        if(e[fields[j]] != results[i][fields[j]]) return false; 
+                    }
+                    return true
+                }) {
+                    counter++;
+                    if(valueIndex) e[valueIndex] += results[i][valueIndex];
+                    results.splice(i, 1);
+                }
+            }
+            if(type == "mean") e[valueIndex] = e.valueIndex/counter;
+            if(type == "freq") e["freq"] = counter;
+            results2.push(e);
+        }
+        
     }
 
     isLoaded() {

@@ -1,20 +1,18 @@
 import React from 'react';
 import ResponsiveContainer from 'recharts/lib/component/ResponsiveContainer';
-import XAxis from 'recharts/lib/cartesian/XAxis';
-import YAxis from 'recharts/lib/cartesian/YAxis';
-import CartesianGrid from 'recharts/lib/cartesian/CartesianGrid';
 import Tooltip from 'recharts/lib/component/Tooltip';
 import Legend from 'recharts/lib/component/Legend';
 import DataComponent from './dataComponent';
 import { withStyles } from '@material-ui/core';
-import BarChart from 'recharts/lib/chart/BarChart';
-import Bar from 'recharts/lib/cartesian/Bar';
+
 import Brush from 'recharts/lib/cartesian/Brush';
 import moment from 'moment';
 
-const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-];
+import PieChart from 'recharts/lib/chart/PieChart';
+import Pie from 'recharts/lib/polar/Pie';
+
+
+
 
 const styles = theme => ({
     graphLine : {
@@ -27,7 +25,7 @@ const styles = theme => ({
     },
 }); 
 
-class DataTest extends React.Component {
+class TestPie extends React.Component {
 
     state = {
         indexKey: "",
@@ -41,28 +39,29 @@ class DataTest extends React.Component {
         this.dm = props.dm;
         this.state.indexKey = props.attributes.indexKey;
         this.state.valueKey = props.attributes.valueKey;
-        this.state.interval = props.attributes.interval;
         this.state.companyName = props.companyName;
         this.state.filter = props.attributes.filter;
         this.state.filter.cptyName = props.companyName;
-        this.state.data = this.dm.getDataFilter(            
-                [this.state.indexKey, this.state.valueKey].concat(Object.keys(this.state.filter)),
+        this.state.type = props.attributes.type;
+        this.state.data = this.dm.getDataAggregate(            
+                this.state.indexKey.concat(Object.keys(this.state.filter)),
+                this.state.valueKey,
                 this.state.filter,
-                [this.state.valueKey],
-                this.state.interval,
+                this.state.type,
             );
         console.log(this.data);
     }
+    //fields, valueIndex, filters={}, type
 
     componentWillReceiveProps(nextProp) {
         if(nextProp.companyName != this.state.companyName) {
             let newFilter = nextProp.attributes.filter;
             newFilter.cptyName = nextProp.companyName;
-            let newData = this.dm.getDataFilter(            
-                [this.state.indexKey, this.state.valueKey].concat(Object.keys(newFilter)),
+            let newData = this.dm.getDataAggregate(            
+                this.state.indexKey.concat(Object.keys(newFilter)),
+                this.state.valueKey,
                 newFilter,
-                [this.state.valueKey],
-                this.state.interval,
+                this.state.type,
             );
             this.setState({companyName: nextProp.companyName, filter: newFilter, data: newData });
         }
@@ -75,24 +74,20 @@ class DataTest extends React.Component {
         return (
             <DataComponent xs={6}>
                 <ResponsiveContainer width="98%" height="98%">
-                    <BarChart data={this.state.data}>
-                        <XAxis 
-                            dataKey={this.state.indexKey}
-                            tickFormatter={e => {
-                                var val = months[moment(e).month()];
-                                if(val == undefined) return "";
-                                else return val}}
-                            />
-                        <YAxis 
-                            unit="M SEK"
-                            tickFormatter={e => {return e/1000000;}}
-                            padding={{left : 100}}/>
-                        <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey={this.state.valueKey} className={classes.graphLine}/>
-                        <Brush height={15}/>
-                    </BarChart>
+                <PieChart >
+                        <Pie
+                            data={this.state.data} 
+                            dataKey={this.state.indexKey[0]} 
+                            nameKey={this.state.valueKey}  
+                            outerRadius="75%" 
+                            fill="#fa7f00" 
+                            label
+                        />
+                        <Legend/>
+                        <Tooltip/>
+                    </PieChart>
+
+
                 </ResponsiveContainer>
             </DataComponent>
         );
@@ -105,4 +100,4 @@ class DataTest extends React.Component {
     }
 }
 
-export default withStyles(styles)(DataTest);
+export default withStyles(styles)(TestPie);
