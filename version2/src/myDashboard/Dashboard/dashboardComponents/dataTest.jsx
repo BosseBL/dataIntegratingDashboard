@@ -35,6 +35,8 @@ class DataTest extends React.Component {
         interval: [],
         companyName: "",
         timeStep: [],
+        domainMax: 0,
+        oom: 10,
     }
 
     constructor(props) {
@@ -46,6 +48,8 @@ class DataTest extends React.Component {
         this.state.dataOC = this.dm.getDataAggregateTime("riskAmount", {status: "OC", cptyName: this.state.companyName}, this.state.timeStep, this.state.interval, );
         this.state.dataOD = this.dm.getDataAggregateTime("riskAmount", {status: "OD", cptyName: this.state.companyName}, this.state.timeStep, this.state.interval, );
         this.state.data = this.mergeData(this.state.dataOC, this.state.dataOD);
+        this.state.domainMax = this.getMax([0, this.state.data.length-1], this.state.data);
+        this.state.oom = Math.floor(Math.log10(this.state.domainMax));
         
     }
 
@@ -54,10 +58,16 @@ class DataTest extends React.Component {
         dates.sort((a, b) => {return moment(a) - moment(b)});
         var newData = [];
         for(let d in dates) {
+            var a = dataOC.find(e => {return e.date == dates[d]});
+            var b = dataOD.find(e => {return e.date == dates[d]});
+            if(a) a = a.riskAmount;
+            else a = 0;
+            if(b) b = b.riskAmount;
+            else b = 0;
             newData.push({
                 date: dates[d], 
-                ocAmount: dataOC.find(e => {return e.date == dates[d]}).riskAmount,
-                odAmount: dataOD.find(e => {return e.date == dates[d]}).riskAmount,
+                ocAmount: a,
+                odAmount: b,
             });
         }
         return newData;
@@ -68,8 +78,29 @@ class DataTest extends React.Component {
             let newDataOC = this.dm.getDataAggregateTime("riskAmount", {status: "OC", cptyName: nextProp.companyName}, this.state.timeStep, this.state.interval, );
             let newDataOD = this.dm.getDataAggregateTime("riskAmount", {status: "OD", cptyName: nextProp.companyName}, this.state.timeStep, this.state.interval, );
             let newData = this.mergeData(newDataOC, newDataOD);
-            console.log(newData);
-            this.setState({companyName: nextProp.companyName, data: newData, dataOD: newDataOD, dataOC: newDataOC});
+            var domMax = this.getMax([0, newData.length-1], newData);
+            var order = Math.floor(Math.log10(domMax));
+            this.setState({oom: order, domainMax: domMax, companyName: nextProp.companyName, data: newData, dataOD: newDataOD, dataOC: newDataOC});
+        }
+    }
+
+    getMax(index, d) {
+        var max = 0;
+        for(var i = index[0]; i < index[1]; i++) {
+            var value = d[i].ocAmount + d[i].odAmount;
+            if(value > max) max = value;
+        }
+        var zeroes = Math.floor(Math.log10(max)) - 1;
+        var order = 10**zeroes;
+        var prefix = Math.ceil((max*1.1)/order);
+        return prefix*order;
+    }
+
+    rescale(e) {
+        var newMax = this.getMax([e.startIndex, e.endIndex], this.state.data);
+        if(newMax < this.state.domainMax/2 || newMax > this.state.domainMax) {
+            var order = Math.floor(Math.log10(newMax));
+            this.setState({domainMax: newMax, oom: order});
         }
     }
 
@@ -87,17 +118,34 @@ class DataTest extends React.Component {
                                 var val = months[moment(e).month()];
                                 if(val == undefined) return "";
                                 else return val}}
+                            
                             />
                         <YAxis 
-                            unit="M SEK"
-                            tickFormatter={e => {return e/1000000;}}
-                            padding={{left : 100}}/>
+                        
+                            tickFormatter={e => {return e/1000000000;}}
+                            padding={{left : 100}}
+                            orientation="left"
+                            yAxisId="left"
+                            label={{ value: "risk volume" , angle: -90, position: 'topLeft' }}
+                            domain={[0, this.state.domainMax]}
+                            />
+                            
+                        <YAxis
+                            
+                            tickFormatter={e => {return e/1000000000;}}
+                            orientation="right"
+                            yAxisId="right"
+                            label={{ value: "Earnings", angle: -90, position: 'topRight' }}
+                            domain={[0, this.state.domainMax]}
+                            interval="preserveEnd"
+                        />
                         <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="ocAmount" className={classes.graphLine} fill="#fa7f00" stackId="a"/>
-                        <Bar dataKey="odAmount" className={classes.graphLine} fill="#fa7f99" stackId="b"/>
-                        <Brush height={15}/>
+                        <Tooltip isAnimationActive={false} />
+                        <Legend verticalAlign="top"/>
+                        <Bar name="Order canceled" yAxisId="left" dataKey="ocAmount" className={classes.graphLine} fill="#fa7f00" stackId="a"/>
+                        <Bar name="Order done" yAxisId="left" dataKey="odAmount" className={classes.graphLine} fill="#fa7f99" stackId="a"/>
+                        <Bar name="Earnings" yAxisId="right" dataKey="odAmount" className={classes.graphLine} fill="#fa3399"/>
+                        <Brush height={15} onChange={this.rescale.bind(this)}/>
                     </BarChart>
                 </ResponsiveContainer>
             </DataComponent>

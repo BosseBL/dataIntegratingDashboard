@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import PieChart from 'recharts/lib/chart/PieChart';
 import Pie from 'recharts/lib/polar/Pie';
-
+import Treemap from 'recharts/lib/chart/Treemap';
 
 const RADIAN = Math.PI / 180;
 
@@ -25,7 +25,7 @@ const styles = theme => ({
     },
 }); 
 
-class TestPie extends React.Component {
+class TestTree extends React.Component {
 
     state = {
         indexKey: "",
@@ -88,22 +88,11 @@ class TestPie extends React.Component {
         return (
             <DataComponent xs={6}>
                 <ResponsiveContainer width="98%" height="98%">
-                <PieChart >
-                        <Pie
-                            data={this.state.data} 
-                            dataKey={this.state.valueKey} 
-                            nameKey={this.state.indexKey[1]}  
-                            outerRadius="75%"
-                            fill="#fa7f00"
-                            labelLine={false}
-                            label={this.renderCustomizedLabel}
-                        />
-                        
-                        <Legend/>
-                        <Tooltip/>
-                    </PieChart>
-
-
+                <Treemap
+                    data={this.state.data}
+                    dataKey="volume"
+                    
+                />
                 </ResponsiveContainer>
             </DataComponent>
         );
