@@ -5,7 +5,8 @@ import './nodeStyle.css';
 
 import * as d3 from "d3";
 const styles = theme => ({
-    
+    container : {
+    }
 }); 
 
 
@@ -64,9 +65,75 @@ class TestGraph2 extends React.Component {
             link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
           });
           
-          var width = 960,
-              height = 500;
+          var width = 300,
+              height = 300;
           
+        var simulation = d3.forceSimulation()
+                            .nodes(nodes);
+            
+        var link_force =  d3.forceLink(links)
+                            .id(function(d) { return d.name; })
+                                  
+             
+        var charge_force = d3.forceManyBody()
+                            .strength(100); 
+        
+        var center_force = d3.forceCenter(width / 2, height / 2);
+
+        simulation
+        .force("charge_force", charge_force)
+        .force("center_force", center_force)
+        .force("links",link_force);
+                      
+        simulation.on("tick", tick);
+
+        var svg = d3.select(this._rootNode).append("svg")
+        .attr("width", width)
+        .attr("height", height);
+    
+        var path = svg.append("g").selectAll("path")
+        .data(links)
+        .enter().append("path")
+        //.attr("class", function(d) { return "link " + d.type; })
+        //.attr("marker-end", function(d) { return "url(#" + d.type + ")"; })
+        .attr("stroke-width", 2)
+        .attr("stroke", "black");
+
+        var circle = svg.append("g").selectAll("circle")
+        .data(nodes)
+        .enter().append("circle")
+        .attr("r", 6)
+        .attr("fill", "black")
+        //.call(center_force.drag);
+    
+        var text = svg.append("g").selectAll("text")
+        .data(nodes)
+        .enter().append("text")
+        .attr("x", 8)
+        .attr("y", ".31em")
+        .text(function(d) { return d.name; });
+    
+        // Use elliptical arc path segments to doubly-encode directionality.
+        function tick() {
+        path.attr("d", linkArc);
+        //circle.attr("transform", transform);
+        circle
+            .attr("cx", function(d) {return d.x;})
+            .attr("cy", function(d) {return d.y;})
+        text.attr("transform", transform);
+        }
+
+        function linkArc(d) {
+            var dx = d.target.x - d.source.x,
+                dy = d.target.y - d.source.y,
+                dr = Math.sqrt(dx * dx + dy * dy);
+            return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+          }
+          
+          function transform(d) {
+            return "translate(" + d.x + "," + d.y + ")";
+          }
+              /*
         var force = d3.layout.force()
         .nodes(d3.values(nodes))
         .links(links)
@@ -131,6 +198,7 @@ class TestGraph2 extends React.Component {
           function transform(d) {
             return "translate(" + d.x + "," + d.y + ")";
           }
+          */
 
     }
 
@@ -149,7 +217,7 @@ class TestGraph2 extends React.Component {
         const {classes} = this.props;
         return (
             <DataComponent xs={6}>
-                <div className="line-container" ref={this._setRef.bind(this)} 
+                <div className={classes.container} ref={this._setRef.bind(this)} 
                     
                 />
             </DataComponent>

@@ -78,7 +78,6 @@ class MainListItems extends React.Component {
                     <ListItemText insert primary={e}/>
                   </ListItem>
                   );
-
                 })}
                 </List>
               </Collapse>

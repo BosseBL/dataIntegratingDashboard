@@ -28,106 +28,65 @@ const styles = theme => ({
 class TestGraph extends React.Component {
 
     state = {
+        parentWidth: 0
     }
 
     constructor(props) {
         super(props);
-
     }
 
-    static propTypes = {
-        
-    }
+
+
 
     componentDidMount() {
         // D3 Code to create the chart
         // using this._rootNode as container
 
-    var width = 360
-    var height = 300
+    //var width = 300;
+    //var height = 300
 
+    var svg = d3.select(this._rootNode).append("svg")
 
-var svg = d3.select(this._rootNode).append("svg")
-.attr("width", width)
-.attr("height", height); 
-//create somewhere to put the force directed graph
-    
+    var width = svg.node().getBoundingClientRect().width*2;
+    var height = svg.node().getBoundingClientRect().height*2;
+
+    svg
+    .attr("width", width)
+    .attr("height", height);
+    //create somewhere to put the force directed graph
+        
 var radius = 15; 
 
 var nodes_data =  [
-    {"name": "Lillian", "sex": "F"},
-    {"name": "Gordon", "sex": "M"},
-    {"name": "Sylvester", "sex": "M"},
-    {"name": "Mary", "sex": "F"},
-    {"name": "Helen", "sex": "F"},
-    {"name": "Jamie", "sex": "M"},
-    {"name": "Jessie", "sex": "F"},
-    {"name": "Ashton", "sex": "M"},
-    {"name": "Duncan", "sex": "M"},
-    {"name": "Evette", "sex": "F"},
-    {"name": "Mauer", "sex": "M"},
-    {"name": "Fray", "sex": "F"},
-    {"name": "Duke", "sex": "M"},
-    {"name": "Baron", "sex": "M"},
-    {"name": "Infante", "sex": "M"},
-    {"name": "Percy", "sex": "M"},
-    {"name": "Cynthia", "sex": "F"},
-    {"name": "Feyton", "sex": "M"},
-    {"name": "Lesley", "sex": "F"},
-    {"name": "Yvette", "sex": "F"},
-    {"name": "Maria", "sex": "F"},
-    {"name": "Lexy", "sex": "F"},
-    {"name": "Peter", "sex": "M"},
-    {"name": "Ashley", "sex": "F"},
-    {"name": "Finkler", "sex": "M"},
-    {"name": "Damo", "sex": "M"},
-    {"name": "Imogen", "sex": "F"}
+    {"name": "SEK", "sex": "F"},
+    {"name": "USD", "sex": "M"},
+    {"name": "EUR", "sex": "M"},
+    {"name": "DDK", "sex": "F"},
+    {"name": "JPY", "sex": "F"},
+    {"name": "AUD", "sex": "M"},
+    {"name": "GBP", "sex": "F"},
+    {"name": "BRL", "sex": "M"},
+    {"name": "LRD", "sex": "M"},
+
+
     ]
 
 //Sample links data 
 //type: A for Ally, E for Enemy
 var links_data = [
-	{"source": "Sylvester", "target": "Gordon", "type":"A" },
-    {"source": "Sylvester", "target": "Lillian", "type":"A" },
-    {"source": "Sylvester", "target": "Mary", "type":"A"},
-    {"source": "Sylvester", "target": "Jamie", "type":"A"},
-    {"source": "Sylvester", "target": "Jessie", "type":"A"},
-    {"source": "Sylvester", "target": "Helen", "type":"A"},
-    {"source": "Helen", "target": "Gordon", "type":"A"},
-    {"source": "Mary", "target": "Lillian", "type":"A"},
-    {"source": "Ashton", "target": "Mary", "type":"A"},
-    {"source": "Duncan", "target": "Jamie", "type":"A"},
-    {"source": "Gordon", "target": "Jessie", "type":"A"},
-    {"source": "Sylvester", "target": "Fray", "type":"E"},
-    {"source": "Fray", "target": "Mauer", "type":"A"},
-    {"source": "Fray", "target": "Cynthia", "type":"A"},
-    {"source": "Fray", "target": "Percy", "type":"A"},
-    {"source": "Percy", "target": "Cynthia", "type":"A"},
-    {"source": "Infante", "target": "Duke", "type":"A"},
-    {"source": "Duke", "target": "Gordon", "type":"A"},
-    {"source": "Duke", "target": "Sylvester", "type":"A"},
-    {"source": "Baron", "target": "Duke", "type":"A"},
-    {"source": "Baron", "target": "Sylvester", "type":"E"},
-    {"source": "Evette", "target": "Sylvester", "type":"E"},
-    {"source": "Cynthia", "target": "Sylvester", "type":"E"},
-    {"source": "Cynthia", "target": "Jamie", "type":"E"},
-    {"source": "Mauer", "target": "Jessie", "type":"E"},
-    {"source": "Duke", "target": "Lexy", "type":"A"},
-    {"source": "Feyton", "target": "Lexy", "type":"A"},
-    {"source": "Maria", "target": "Feyton", "type":"A"},
-    {"source": "Baron", "target": "Yvette", "type":"E"},
-    {"source": "Evette", "target": "Maria", "type":"E"},
-    {"source": "Cynthia", "target": "Yvette", "type":"E"},
-    {"source": "Maria", "target": "Jamie", "type":"E"},
-    {"source": "Maria", "target": "Lesley", "type":"E"},
-    {"source": "Ashley", "target": "Damo", "type":"A"},
-    {"source": "Damo", "target": "Lexy", "type":"A"},
-    {"source": "Maria", "target": "Feyton", "type":"A"},
-    {"source": "Finkler", "target": "Ashley", "type":"E"},
-    {"source": "Sylvester", "target": "Maria", "type":"E"},
-    {"source": "Peter", "target": "Finkler", "type":"E"},
-    {"source": "Ashley", "target": "Gordon", "type":"E"},
-    {"source": "Maria", "target": "Imogen", "type":"E"}
+	{"source": "EUR", "target": "USD", "type":"A", "volume": 300},
+    {"source": "EUR", "target": "SEK", "type":"A", "volume": 200},
+    {"source": "EUR", "target": "DDK", "type":"A", "volume": 300},
+    {"source": "EUR", "target": "AUD", "type":"A", "volume": 900},
+    {"source": "EUR", "target": "GBP", "type":"A", "volume": 200},
+    {"source": "EUR", "target": "JPY", "type":"A", "volume": 200},
+    {"source": "JPY", "target": "USD", "type":"A", "volume": 300},
+    {"source": "DDK", "target": "SEK", "type":"A", "volume": 400},
+    {"source": "BRL", "target": "DDK", "type":"A", "volume": 600},
+    {"source": "LRD", "target": "AUD", "type":"A", "volume": 300},
+    {"source": "AUD", "target": "LRD", "type":"A", "volume": 300},
+    {"source": "USD", "target": "GBP", "type":"A", "volume": 100},
+
     
 ]
 
@@ -137,10 +96,11 @@ var simulation = d3.forceSimulation()
 					.nodes(nodes_data);
                               
 var link_force =  d3.forceLink(links_data)
-                        .id(function(d) { return d.name; });            
+                        .id(function(d) { return d.name; }) 
+                        .distance(60);           
          
 var charge_force = d3.forceManyBody()
-    .strength(-100); 
+    .strength(-150); 
     
 var center_force = d3.forceCenter(width / 2, height / 2);  
                       
@@ -157,14 +117,44 @@ simulation.on("tick", tickActions );
 var g = svg.append("g")
     .attr("class", "everything");
 
+var linScale = d3.scaleLinear()
+    .domain([
+        d3.min(links_data, function(d) {return d.volume;}),
+        d3.max(links_data, function(d) {return d.volume;})
+    ])
+    .range([1, 5]);
+
+var tranScale = d3.scaleLinear()
+    .domain([
+        d3.min(links_data, function(d) {return d.volume;}),
+        d3.max(links_data, function(d) {return d.volume;})
+    ])
+    .range([0.5, 1]);
+
 //draw lines for the links 
 var link = g.append("g")
     .attr("class", "links")
-    .selectAll("line")
+    .selectAll("path")
     .data(links_data)
-    .enter().append("line")
-    .attr("stroke-width", 2)
-    .style("stroke", linkColour);        
+    .enter().append("path")
+    .attr("marker-end", "url(#triangle)")
+    .attr("stroke-width", function(d) {return linScale(d.volume);})
+    .style("stroke", "rgba(0,0,0)")
+    .style("stroke-opacity", function(d) {return String(tranScale(d.volume))})
+    .attr("fill", "none");    
+
+g.append("svg:defs").append("svg:marker")
+    .attr("id", "triangle")
+    .attr("viewBox", '0, 0, 50, 50')
+    .attr("refX", 8)
+    .attr("refY", 6)
+    .attr("markerWidth", 20)
+    .attr("markerHeight", 20)
+    .attr("markerUnits", "strokeWidth") //"userSpaceOnUse")
+    .attr("orient", "auto")
+    .append("path")
+    .attr("d", "M 0 0 12 6 0 12 3 6")
+    .style("fill", "black");
 
 //draw circles for the nodes 
 var node = g.append("g")
@@ -174,8 +164,16 @@ var node = g.append("g")
         .enter()
         .append("circle")
         .attr("r", radius)
-        .attr("fill", circleColour);
+        .attr("stroke", "black").style("stroke-width", 2)
+        .attr("fill", "white");
  
+var text = g.append("g").selectAll("text")
+        .data(nodes_data)
+        .enter().append("text")
+        .attr("x", 0)
+        .attr("y", 0)
+        .style("font-size", 13)
+        .text(function(d) {return d.name;});
 
 //add drag capabilities  
 var drag_handler = d3.drag()
@@ -240,6 +238,27 @@ function zoom_actions(){
     g.attr("transform", d3.event.transform)
 }
 
+function linkArc(d) {
+    var yTarget = lineY2(d);
+    var xTarget = lineX2(d);
+    var dx = xTarget - d.source.x,
+        dy = yTarget - d.source.y,
+        dr = Math.sqrt(dx * dx + dy * dy);
+    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + xTarget + "," + yTarget;
+  }
+
+  var lineX2 = function (d) {
+    var length = Math.sqrt(Math.pow(d.target.y - d.source.y, 2) + Math.pow(d.target.x - d.source.x, 2));
+    var scale = (length - radius-10) / length;
+    var offset = (d.target.x - d.source.x) - (d.target.x - d.source.x) * scale;
+    return d.target.x - offset;
+};
+var lineY2 = function (d) {
+    var length = Math.sqrt(Math.pow(d.target.y - d.source.y, 2) + Math.pow(d.target.x - d.source.x, 2));
+    var scale = (length - radius) / length;
+    var offset = (d.target.y - d.source.y) - (d.target.y - d.source.y) * scale;
+    return d.target.y - offset;
+};
 
 function tickActions() {
     //update circle positions each tick of the simulation 
@@ -248,13 +267,20 @@ function tickActions() {
         .attr("cy", function(d) { return d.y; });
         
     //update link positions 
+    link.attr("d", linkArc);
+    /*
     link
         .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+        .attr("x2", lineX2)
+        .attr("y2", lineY2);
+    */
+    text
+        .attr("x", function(d) {return d.x-13;})
+        .attr("y", function(d) {return d.y+5;})
 }
     }
+
 
     shouldComponentUpdate() {
         // Prevents component re-rendering

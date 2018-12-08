@@ -9,6 +9,7 @@ import TestTree from '../Dashboard/dashboardComponents/testTree'
 import TestTable from '../Dashboard/dashboardComponents/testTable';
 import TestList from '../Dashboard/dashboardComponents/testList';
 import TestGraph from '../Dashboard/dashboardComponents/testGraph';
+import TestGraph2 from '../Dashboard/dashboardComponents/testGraph2';
 
 var templates = [
     {
@@ -109,6 +110,15 @@ var templates = [
             
         ],
     },
+    {
+        name: "Graph",
+        components: [
+            {
+                component: TestGraph,
+            }
+        ],
+    },
+    
 ];
 
 

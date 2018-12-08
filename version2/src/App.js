@@ -23,6 +23,7 @@ const theme = createMuiTheme({
     primary: orange,
     secondary: blue,
   },
+  
 });
 
 
@@ -34,7 +35,7 @@ class App extends Component {
     remoteDataManager: null,
     localDataLoaded: false,
     source: 1,
-    activeTemplate: 3,
+    activeTemplate: 4,
     companyList: [],
     activeCompany: "Scania",
   }
