@@ -34,13 +34,13 @@ class DataPie extends React.Component {
     }
 
     getPieData(entity, field) {
-        var filteredData = this.dm.getData().filter((e) => {return e.cptyName == entity});
+        var filteredData = this.dm.getData().filter((e) => {return e.cptyName === entity});
         var fieldValues = Array.from(new Set(filteredData.map((n) => {return n[field]})));
         var returnData = [];
         for(var i = 0; i < fieldValues.length; i++) {
             var count = 0;
             for(var j = 0; j < filteredData.length; j++) {
-                if(filteredData[j][field] == fieldValues[i]) count++;
+                if(filteredData[j][field] === fieldValues[i]) count++;
             }
             returnData.push({name: fieldValues[i], value: count});
         }

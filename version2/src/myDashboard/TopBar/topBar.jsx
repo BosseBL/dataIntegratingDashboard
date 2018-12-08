@@ -7,12 +7,10 @@ import classNames from 'classnames';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {DashboardConsumer} from '../../dashboardContext';
-import InsertDriverFile from '@material-ui/icons/InsertDriveFile';
 import SearchField from './searchField';
 import logo from './swedbankLogo2.jpg';
 
@@ -125,7 +123,7 @@ class TopBar extends React.Component {
               >
                 <MenuIcon />
               </IconButton>
-              <img src={logo} noWrap/>
+              <img src={logo} nowrap="true" alt="alt text"/>
               <Typography
                 component="h1"
                 variant="h6"

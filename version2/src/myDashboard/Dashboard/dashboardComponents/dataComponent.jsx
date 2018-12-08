@@ -6,7 +6,7 @@ const styles = theme => ({
     root: {
         display: 'flex',
         width: '100%',
-        height: '300px',
+        height: '350px',
         overflow: 'auto',
       },
 });
@@ -14,11 +14,12 @@ const styles = theme => ({
 class DataComponent extends React.Component {
     render() {
         const {classes} = this.props;
+        // replaced Paper with div
         return (
             <Grid item xs={this.props.xs}>
-            <Paper className={classes.root} >
+            <div className={classes.root} >
                 {this.props.children}
-            </Paper>
+            </div>
             </Grid>
         );
     }

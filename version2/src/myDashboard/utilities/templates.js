@@ -5,6 +5,10 @@ import DataBar from '../Dashboard/dashboardComponents/dataBar';
 import DataTest from '../Dashboard/dashboardComponents/dataTest';
 import dataMap from './dataMap';
 import TestPie from '../Dashboard/dashboardComponents/testPie';
+import TestTree from '../Dashboard/dashboardComponents/testTree'
+import TestTable from '../Dashboard/dashboardComponents/testTable';
+import TestList from '../Dashboard/dashboardComponents/testList';
+import TestGraph from '../Dashboard/dashboardComponents/testGraph';
 
 var templates = [
     {
@@ -67,13 +71,42 @@ var templates = [
             {
                 component: TestPie,
                 attributes: {
-                    indexKey: ["status", "type"],
                     filter: {},
                     companySpecific: true,
-                    valueKey: "riskAmount",
-                    type: "sum",
+                    interval: ["2018-01-01", "2019-01-01"],
                 },
             },
+            {
+                component: TestTree,
+                attributes: {
+                    valueKey: "riskAmount",
+                    filter: {},
+                    companySpecific: true,
+                    interval: ["2018-01-01", "2019-01-01"],
+                    hierarchy: ["Pair", "type", "status", ],
+                }
+            },
+            {
+                component: TestTable,
+                attributes: {
+                    interval: ["2018-01-01", "2019-01-01"],
+                    filter: {},
+                    companySpecific: true,
+                }
+            },
+            {
+                component: TestList,
+                attributes: {
+                    interval: ["2018-01-01", "2019-01-01"],
+                    filter: {},
+                    companySpecific: true,
+                }
+            },
+            {
+                component: TestGraph,
+                attributes: {}
+            },
+            
         ],
     },
 ];

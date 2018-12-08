@@ -11,7 +11,10 @@ import TemplateManager from './myDashboard/utilities/templateManager';
 
 import orange from '@material-ui/core/colors/orange';
 import blue from '@material-ui/core/colors/blue';
-import { runInThisContext } from 'vm';
+
+
+import testData from './myDashboard/utilities/testData';
+
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true,
@@ -31,9 +34,9 @@ class App extends Component {
     remoteDataManager: null,
     localDataLoaded: false,
     source: 1,
-    activeTemplate: 0,
+    activeTemplate: 3,
     companyList: [],
-    activeCompany: "",
+    activeCompany: "Scania",
   }
 
   constructor(props) {
@@ -42,6 +45,10 @@ class App extends Component {
     this.state.templateManager = new TemplateManager();
     this.state.localDataManager = localDataManager;
     this.state.remoteDataManager = remoteDataManager;
+
+    this.state.localDataLoaded = true;
+    this.state.localDataManager.setData(testData);
+
     this.state.companyList = (this.state.source===1 ? localDataManager.getNames() : remoteDataManager.getNames());
   }
 

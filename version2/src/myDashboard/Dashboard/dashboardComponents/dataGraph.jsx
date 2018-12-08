@@ -9,10 +9,8 @@ import Tooltip from 'recharts/lib/component/Tooltip';
 import Legend from 'recharts/lib/component/Legend';
 import DataComponent from './dataComponent';
 import { withStyles } from '@material-ui/core';
-import BarChart from 'recharts/lib/chart/BarChart';
-import Bar from 'recharts/lib/cartesian/Bar';
 import Brush from 'recharts/lib/cartesian/Brush';
-import moment from 'moment';
+
 
 const styles = theme => ({
     graphLine : {
@@ -37,9 +35,9 @@ class DataGraph extends React.Component {
         super(props);
         this.dm = props.dm;
         this.state.indexKey = props.attributes.indexKey;
-        this.state.data = this.dm.getData().filter( (d) => {return d.cptyName == 'Scania'})
+        this.state.data = this.dm.getData().filter( (d) => {return d.cptyName === 'Scania'})
                                 .map((n) => {return {test: n.test, riskAmount: n.riskAmount}});
-        this.state.yKeys = Object.keys(this.state.data[0]).filter((key) => {return key != this.state.indexKey});
+        this.state.yKeys = Object.keys(this.state.data[0]).filter((key) => {return key !== this.state.indexKey});
 
     }
 

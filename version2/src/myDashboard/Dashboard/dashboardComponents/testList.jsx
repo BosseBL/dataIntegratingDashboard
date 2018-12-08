@@ -21,16 +21,30 @@ const styles = theme => ({
     }
 });
 
-class DataTable extends React.Component {
+class TestList extends React.Component {
 
     state = {
         data: null,
+        companyName: "",
     }
 
     constructor(props) {
         super(props);
         this.dm = props.dm;
-        this.state.data = this.dm.getData();
+        this.state.interval = props.attributes.interval;
+        this.state.filter = props.attributes.filter;
+        this.state.filter.cptyName = props.companyName;
+        this.state.companyName = props.companyName;
+        this.state.data = this.dm.getDataList(this.state.filter, this.state.interval);
+    }
+
+    componentWillReceiveProps(nextProp) {
+        if(nextProp.companyName != this.state.companyName) {
+            let newFilter = nextProp.attributes.filter;
+            newFilter.cptyName = nextProp.companyName;
+            let newData = this.dm.getDataList(newFilter, this.state.interval);
+            this.setState({companyName: nextProp.companyName, filter: newFilter, data: newData});
+        }
     }
 
     render() {
@@ -38,24 +52,15 @@ class DataTable extends React.Component {
 
         return (
 
-            <DataComponent xs={12} >
+            <DataComponent xs={6} >
                 <Table className={classes.table}>
-                    <TableHead >
-                        <TableRow >
-                            {Object.keys(this.state.data[0]).map(n => {
-                                return (
-                                    <TableCell key={n} className={classes.tableHeader}> {n} </TableCell>
-                                );
-                        })}
-                        </TableRow>
-                    </TableHead>
                     <TableBody className={classes.tableBody}>
                         {this.state.data.map(n => {
                             return (
-                                <TableRow key={n.id.toString()}>
+                                <TableRow key={n.name.toString()}>
                                     {Object.keys(n).map((key, index) => {
                                         return (
-                                            <TableCell key={n.id.toString() + key}> {n[key]} </TableCell>
+                                            <TableCell key={index}> {n[key]} </TableCell>
                                         );
                                     })}
                                 </TableRow>
@@ -72,4 +77,4 @@ class DataTable extends React.Component {
     }
 }
 
-export default withStyles(styles)(DataTable);
+export default withStyles(styles)(TestList);

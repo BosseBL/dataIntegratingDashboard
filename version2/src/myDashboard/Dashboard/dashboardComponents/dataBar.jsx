@@ -1,7 +1,6 @@
 import React from 'react';
 import ResponsiveContainer from 'recharts/lib/component/ResponsiveContainer';
-import LineChart from 'recharts/lib/chart/LineChart';
-import Line from 'recharts/lib/cartesian/Line';
+
 import XAxis from 'recharts/lib/cartesian/XAxis';
 import YAxis from 'recharts/lib/cartesian/YAxis';
 import CartesianGrid from 'recharts/lib/cartesian/CartesianGrid';
@@ -36,9 +35,9 @@ class DataBar extends React.Component {
         super(props);
         this.dm = props.dm;
         this.state.indexKey = props.attributes.indexKey;
-        this.state.data = this.dm.getData().filter( (d) => {return d.cptyName == 'Scania'})
+        this.state.data = this.dm.getData().filter( (d) => {return d.cptyName === 'Scania'})
                                 .map((n) => {return {date: n.date, riskAmount: n.riskAmount}});
-        this.state.yKeys = Object.keys(this.state.data[0]).filter((key) => {return key != this.state.indexKey});
+        this.state.yKeys = Object.keys(this.state.data[0]).filter((key) => {return key !== this.state.indexKey});
 
     }
 

@@ -21,7 +21,7 @@ const styles = theme => ({
     }
 });
 
-class DataTable extends React.Component {
+class TestTable extends React.Component {
 
     state = {
         data: null,
@@ -30,7 +30,31 @@ class DataTable extends React.Component {
     constructor(props) {
         super(props);
         this.dm = props.dm;
-        this.state.data = this.dm.getData();
+        this.state.filter = props.attributes.filter;
+        this.state.interval = props.attributes.interval;
+        this.state.filter.cptyName = props.companyName;
+        this.state.data = this.dm.getDataTable(this.state.interval, this.state.filter);
+    }
+
+    componentWillReceiveProps(nextProp) {
+        if(nextProp.companyName != this.state.companyName) {
+            let newFilter = nextProp.attributes.filter;
+            newFilter.cptyName = nextProp.companyName;
+            let newData = this.dm.getDataTable(this.state.interval, this.state.filter);
+            this.setState({companyName: nextProp.companyName, filter: newFilter, data: newData });
+        }
+    }
+
+    roundDown(v) {
+        if(v > 0) {
+            var units = ["", "k", "M", "B"];
+            var order = Math.floor(Math.log10(v));
+            var n = order%3;
+            var k = Math.floor(order/3);
+            var newValue = Math.floor(v/(10**(order-2)));
+            return String(newValue) + units[k];  
+        }
+        return String(v);
     }
 
     render() {
@@ -38,7 +62,7 @@ class DataTable extends React.Component {
 
         return (
 
-            <DataComponent xs={12} >
+            <DataComponent xs={6} >
                 <Table className={classes.table}>
                     <TableHead >
                         <TableRow >
@@ -52,11 +76,18 @@ class DataTable extends React.Component {
                     <TableBody className={classes.tableBody}>
                         {this.state.data.map(n => {
                             return (
-                                <TableRow key={n.id.toString()}>
+                                <TableRow key={n.Pair.toString()}>
                                     {Object.keys(n).map((key, index) => {
+                                        if(index == 0) {
                                         return (
-                                            <TableCell key={n.id.toString() + key}> {n[key]} </TableCell>
+                                            <TableCell key={n.Pair.toString() + key}> {n[key]} </TableCell>
                                         );
+                                        }
+                                        else {
+                                            return (
+                                                <TableCell key={n.Pair.toString() + key}> {this.roundDown(n[key])} </TableCell>
+                                            );
+                                        }
                                     })}
                                 </TableRow>
 
@@ -66,10 +97,7 @@ class DataTable extends React.Component {
                     </Table>
                 </DataComponent>
                 );
-            
-
-        
     }
 }
 
-export default withStyles(styles)(DataTable);
+export default withStyles(styles)(TestTable);

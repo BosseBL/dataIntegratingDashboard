@@ -143,7 +143,7 @@ class SearchField extends React.Component {
         return (
       <InputBase
         fullWidth
-        InputProps={{
+        inputProps={{
           inputRef: node => {
             ref(node);
             inputRef(node);

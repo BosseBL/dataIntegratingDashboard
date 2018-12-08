@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+
 const styles = theme => ({
     appBarSpacer: theme.mixins.toolbar,
     addButton: {
@@ -15,6 +16,8 @@ const styles = theme => ({
         left: theme.spacing.unit * 2,
       },
 });
+
+const COLORS = ['#8889DD', '#9597E4', '#8DC77B', '#A5D297', '#E2CF45', '#F8C12D'];
 
 class DashboardArea extends React.Component {
 
@@ -52,13 +55,16 @@ class DashboardArea extends React.Component {
                             <Grid container spacing={16}>
                             {template.components.map((e, i) => {
                                 return(
-                                    <e.component key={i} dm={dm} attributes={e.attributes} companyName={this.props.activeCompany}/>
+                                    <e.component key={i} dm={dm} attributes={e.attributes} companyName={this.props.activeCompany} colors={COLORS}/>
                                 );
                             })}
+                                <Grid item xs={this.props.xs}>
+                                <Button variant="fab" className={classes.addButton} color="primary">
+                                    <AddIcon />
+                                </Button>
+                                </Grid>
                             </Grid>
-                            <Button variant="fab" className={classes.addButton} color="primary">
-                                <AddIcon />
-                            </Button>
+
                     </div>
                 );
             }

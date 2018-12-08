@@ -1,18 +1,12 @@
 import React from 'react';
 import ResponsiveContainer from 'recharts/lib/component/ResponsiveContainer';
 import Tooltip from 'recharts/lib/component/Tooltip';
-import Legend from 'recharts/lib/component/Legend';
+
 import DataComponent from './dataComponent';
 import { withStyles } from '@material-ui/core';
 
-import Brush from 'recharts/lib/cartesian/Brush';
-import moment from 'moment';
-
-import PieChart from 'recharts/lib/chart/PieChart';
-import Pie from 'recharts/lib/polar/Pie';
 import Treemap from 'recharts/lib/chart/Treemap';
 
-const RADIAN = Math.PI / 180;
 
 const styles = theme => ({
     graphLine : {
@@ -24,6 +18,53 @@ const styles = theme => ({
         },
     },
 }); 
+
+class CustomizedContent extends React.Component {
+    render() {
+      const { root, depth, x, y, width, height, index, payload, colors, rank, name } = this.props;
+        
+      return (
+        <g>
+          <rect
+            x={x}
+            y={y}
+            width={width}
+            height={height}
+            style={{
+              fill: depth < 2 ? colors[Math.floor(index / root.children.length * 6)] : 'none',
+              
+              stroke: '#fff',
+              strokeWidth: 3 / (depth + 1e-10),
+              strokeOpacity: 1 / (depth + 1e-10),
+            }}
+          />
+          {
+            depth === 1 ?
+            <text
+            x={x + 8}
+            y={y + 18}
+              fill="#fff"
+              fontSize={16}
+            >
+              {name}
+            </text>
+            : 
+            <text
+            x={x + width / 2}
+            y={y + height / 2 + 7}
+            textAnchor="middle"
+            fill="#888"
+            stroke="#eee"
+            fontSize={16 - depth*2}
+          >
+            {name}
+          </text>
+          }
+          
+        </g>
+      );
+    }
+}
 
 class TestTree extends React.Component {
 
@@ -37,62 +78,55 @@ class TestTree extends React.Component {
     constructor(props) {
         super(props);
         this.dm = props.dm;
-        this.state.indexKey = props.attributes.indexKey;
         this.state.valueKey = props.attributes.valueKey;
         this.state.companyName = props.companyName;
         this.state.filter = props.attributes.filter;
         this.state.filter.cptyName = props.companyName;
-        this.state.type = props.attributes.type;
-        this.state.data = this.dm.getDataAggregate(            
-                this.state.indexKey.concat(Object.keys(this.state.filter)),
+        this.state.interval = props.attributes.interval;
+        this.state.hierarchy = props.attributes.hierarchy;
+        this.state.data = this.dm.getDataTree(
                 this.state.valueKey,
+                this.state.hierarchy, 
                 this.state.filter,
-                this.state.type,
+                this.state.interval,
             );
-        console.log(this.data);
     }
     //fields, valueIndex, filters={}, type
 
     componentWillReceiveProps(nextProp) {
-        if(nextProp.companyName != this.state.companyName) {
+        if(nextProp.companyName !== this.state.companyName) {
             let newFilter = nextProp.attributes.filter;
             newFilter.cptyName = nextProp.companyName;
-            let newData = this.dm.getDataAggregate(            
-                this.state.indexKey.concat(Object.keys(newFilter)),
+            let newData = this.dm.getDataTree(            
                 this.state.valueKey,
+                this.state.hierarchy,
                 newFilter,
-                this.state.type,
+                this.state.interval,
             );
             this.setState({companyName: nextProp.companyName, filter: newFilter, data: newData });
         }
     }
 
     
-    renderCustomizedLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name}) {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x  = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy  + radius * Math.sin(-midAngle * RADIAN);
 
-    return (
-    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} 	dominantBaseline="central">
-        {`${name}`}
-    </text>
-    );
-    
-   };
 
     render() {
         const {classes} = this.props;
 
-        if(this.state.companyName != "") {
+        if(this.state.companyName !== "") {
         return (
             <DataComponent xs={6}>
                 <ResponsiveContainer width="98%" height="98%">
                 <Treemap
                     data={this.state.data}
-                    dataKey="volume"
-                    
-                />
+                    dataKey="value"
+                    ratio={4/3}
+                    stroke="#fff"
+                    fill="#8884d8"
+                    content={<CustomizedContent colors={this.props.colors}/>}  
+                >
+                <Tooltip/>
+                </Treemap>
                 </ResponsiveContainer>
             </DataComponent>
         );
@@ -105,4 +139,4 @@ class TestTree extends React.Component {
     }
 }
 
-export default withStyles(styles)(TestPie);
+export default withStyles(styles)(TestTree);

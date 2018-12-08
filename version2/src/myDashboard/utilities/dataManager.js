@@ -98,16 +98,18 @@ class LocalDataManager {
         return true;
     }
 
-    getDataAggregate(fields, valueIndex, filters={}, type) {
+    getDataAggregate(fields, valueIndex, filters={}, type, interval=[]) {
         var results = [];
 
         for(let d in this.data) {
             let e = {};
-            for(let f in fields) {
-                e[fields[f]] = this.data[d][fields[f]];
+            if(this.filterEqual(filters, this.data[d]) && this.inInterval(interval, this.data[d])) {
+                for(let f in fields) {
+                    e[fields[f]] = this.data[d][fields[f]];
+                }
+                e[valueIndex] = Number(this.data[d][valueIndex]);
+                results.push(e);
             }
-            e[valueIndex] = Number(this.data[d][valueIndex]);
-            results.push(e);
         }
 
         for(let f in filters) {
@@ -148,14 +150,13 @@ class LocalDataManager {
 
         results.sort((a, b) => {return moment(a.date) - moment(b.date)});
 
+        
         for(var i = results.length-2; i >= 0; i--) {
             if(moment(results[i+1].date)[timeSteps]() == moment(results[i].date)[timeSteps]()) {
                 results[i][valueIndex] += results[i+1][valueIndex];
                 results.splice(i+1, 1);
             }
         }
-
-        console.log(results, results.length, results[0], results[2]);
 
         var format = "";
         if(timeSteps == "month") format = "YYYY-MM";
@@ -166,9 +167,136 @@ class LocalDataManager {
             results[e].date = moment(results[e].date).format(format);
         }
         
-        console.log(results);
         return results;
-        
+    }
+
+    getDataPie(categoryIndex, valueIndex,  filter, interval) {
+        var results = [];
+
+        for(let d in this.data) {
+            let e = {};
+            if(this.filterEqual(filter, this.data[d]) && this.inInterval(interval, this.data[d])) {
+                e[categoryIndex] = this.data[d][categoryIndex];
+                e[valueIndex] = Number(this.data[d][valueIndex]);
+                results.push(e);
+            }
+        }
+
+        var results2 = [];
+        var setList = this.getSetOfValues(categoryIndex, results);
+        for(let v in setList) {
+            let n = {}
+            let value = 0;
+            for(let i in results) {
+                if(results[i][categoryIndex] === setList[v]) value += results[i][valueIndex];                
+            }
+            n[categoryIndex] = setList[v];
+            n[valueIndex] = value;
+            results2.push(n);
+        }
+        return results2;
+    }
+
+    getSetOfValues(field, data) {
+        return Array.from(new Set(data.map(e => {return e[field]})));
+    }
+
+    generateTree(h, data, valueIndex) {
+        var result = [];
+        var hierarchy = Array.from(h);
+        var field = hierarchy.shift();
+        var setList = this.getSetOfValues(field, data);
+        for(let v in setList) {
+            var filteredData = data.filter(e => {return e[field] == setList[v]})
+            if(hierarchy.length > 0) result.push({name: setList[v], children: this.generateTree(hierarchy, filteredData, valueIndex)});
+            else result.push({name: setList[v], value: filteredData.map(e => {return Number(e[valueIndex])}).reduce((a,b) => {return a + b}, 0)})
+        }
+        return result;
+    }
+
+    getDataTree(valueIndex ,hierarchy, filters = {}, interval = [], ) {
+        var results = [];
+        for(let d in this.data) {
+            var e = {};
+            if(this.filterEqual(filters, this.data[d]) && this.inInterval(interval, this.data[d])) {
+                e[valueIndex] = Number(this.data[d][valueIndex]);
+                for(let h in hierarchy) {
+                    e[hierarchy[h]] = this.data[d][hierarchy[h]];
+                }
+                results.push(e);
+            }
+        }
+
+        var tree = this.generateTree(hierarchy, results, valueIndex);
+
+        return tree;
+    }
+
+    sumFilter(filter, valueIndex, data) {
+        var sum = 0;
+        for(let d in data) {
+            if(this.filterEqual(filter, data[d])) {
+                sum += Number(data[d][valueIndex]);
+            }
+        }
+        return sum;
+    }
+
+    getDataTable(interval, filter) {
+        var results = [];
+        for(let d in this.data) {
+            var e = {};
+            if(this.filterEqual(filter, this.data[d]) && this.inInterval(interval, this.data[d])) {
+                e["Pair"] = this.data[d]["Pair"];
+                e["status"] = this.data[d]["status"];
+                e["riskAmount"] = this.data[d]["riskAmount"];
+                e["earnings"] = this.data[d]["earnings"];
+                results.push(e);
+            }
+        }
+
+        var results2 = [];
+        var setList = this.getSetOfValues("Pair", results);
+
+        for(let s in setList) {
+            var e = {};
+            e.Pair = setList[s];
+            e.deal = this.sumFilter({Pair: e.Pair, status: "OD"}, "riskAmount", results);
+            e.NoDeal = this.sumFilter({Pair: e.Pair, status: "OC"}, "riskAmount", results);
+            e.earnings = this.sumFilter({Pair: e.Pair}, "earnings", results);
+            results2.push(e);
+        }
+        console.log(results2);
+        return results2;
+    }
+
+    getDataList(filter, interval) {
+        var results = [];
+        for(let d in this.data) {
+            var e = {};
+            if(this.filterEqual(filter, this.data[d]) && this.inInterval(interval, this.data[d])) {
+                e["date"] = this.data[d]["date"];
+                e["Pair"] = this.data[d]["Pair"];
+                e["status"] = this.data[d]["status"];
+                e["type"] = this.data[d]["type"];
+                e["riskAmount"] = this.data[d]["riskAmount"];
+                e["earnings"] = this.data[d]["earnings"];
+                results.push(e);
+            }
+        }
+
+        results.sort((a, b) => {return moment(a.date) - moment(b.date)});
+
+        var volume = this.sumFilter({status:"OD"}, "riskAmount", results);
+        var totalVolume = this.sumFilter({}, "riskAmount", results);
+
+        var results2 = [
+            {name: "Earnings", value: this.sumFilter({}, "earnings", results)},
+            {name: "Volume", value: volume},
+            {name: "Asked Volume", value: totalVolume},
+            {name: "Hit Ratio", value: Math.floor((volume/totalVolume)*100)},
+        ];
+        return results2;
     }
 
     isLoaded() {
