@@ -28,22 +28,44 @@ const styles = theme => ({
 class TestGraph extends React.Component {
 
     state = {
-        parentWidth: 0
+        parentWidth: 0,
+        filter: {},
     }
 
     constructor(props) {
         super(props);
+        this.dm = props.dm;
+        this.state.companyName = props.companyName;
+        this.state.filter = props.attributes.filter;
+        this.state.interval = props.attributes.interval;
+        this.state.filter.cptyName = props.companyName;
+        this.state.data = this.dm.getDataGraph(this.state.interval, this.state.filter);
+    }
+
+    componentWillReceiveProps(nextProp) {
+        if(nextProp.companyName != this.state.companyName) {
+            let newFilter = nextProp.attributes.filter;
+            newFilter.cptyName = nextProp.companyName;
+            let newData = this.dm.getDataGraph(this.state.interval, newFilter);
+            this.setState({companyName: nextProp.companyName, filter: newFilter, data: newData});
+            
+        }
+        //this.renderNodeGraph();
+    }
+
+    componentDidUpdate(prevProp) {
+        if(this.props.companyName != prevProp.companyName) {
+            this.renderNodeGraph();
+        }
+
     }
 
 
-
-
-    componentDidMount() {
-        // D3 Code to create the chart
-        // using this._rootNode as container
-
+    renderNodeGraph() {
     //var width = 300;
     //var height = 300
+
+    d3.select(this._rootNode).select("svg").remove();
 
     var svg = d3.select(this._rootNode).append("svg")
 
@@ -56,6 +78,8 @@ class TestGraph extends React.Component {
     //create somewhere to put the force directed graph
         
 var radius = 15; 
+
+/*
 
 var nodes_data =  [
     {"name": "SEK", "sex": "F"},
@@ -86,9 +110,13 @@ var links_data = [
     {"source": "LRD", "target": "AUD", "type":"A", "volume": 300},
     {"source": "AUD", "target": "LRD", "type":"A", "volume": 300},
     {"source": "USD", "target": "GBP", "type":"A", "volume": 100},
-
-    
 ]
+*/
+
+var nodes_data = this.state.data.nodes;
+
+var links_data = this.state.data.links;
+
 
 
 //set up the simulation and add forces  
@@ -97,10 +125,10 @@ var simulation = d3.forceSimulation()
                               
 var link_force =  d3.forceLink(links_data)
                         .id(function(d) { return d.name; }) 
-                        .distance(60);           
+                        .distance(70);           
          
 var charge_force = d3.forceManyBody()
-    .strength(-150); 
+    .strength(-400); 
     
 var center_force = d3.forceCenter(width / 2, height / 2);  
                       
@@ -156,6 +184,15 @@ g.append("svg:defs").append("svg:marker")
     .attr("d", "M 0 0 12 6 0 12 3 6")
     .style("fill", "black");
 
+
+    var text = g.append("g").selectAll("text")
+    .data(nodes_data)
+    .enter().append("text")
+    .attr("x", 0)
+    .attr("y", 0)
+    .style("font-size", 13)
+    .text(function(d) {return d.name;});
+
 //draw circles for the nodes 
 var node = g.append("g")
         .attr("class", "nodes") 
@@ -165,15 +202,7 @@ var node = g.append("g")
         .append("circle")
         .attr("r", radius)
         .attr("stroke", "black").style("stroke-width", 2)
-        .attr("fill", "white");
- 
-var text = g.append("g").selectAll("text")
-        .data(nodes_data)
-        .enter().append("text")
-        .attr("x", 0)
-        .attr("y", 0)
-        .style("font-size", 13)
-        .text(function(d) {return d.name;});
+        .attr("fill", "rgb(250,250,0,0.2)");
 
 //add drag capabilities  
 var drag_handler = d3.drag()
@@ -241,23 +270,40 @@ function zoom_actions(){
 function linkArc(d) {
     var yTarget = lineY2(d);
     var xTarget = lineX2(d);
-    var dx = xTarget - d.source.x,
-        dy = yTarget - d.source.y,
+    var ySource = lineSourceY2(d);
+    var xSource = lineSourceX2(d);
+    var dx = xTarget - xSource,
+        dy = yTarget - ySource,
         dr = Math.sqrt(dx * dx + dy * dy);
-    return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + xTarget + "," + yTarget;
+    return "M" + xSource + "," + ySource + "A" + dr + "," + dr + " 0 0,1 " + xTarget + "," + yTarget;
   }
 
   var lineX2 = function (d) {
     var length = Math.sqrt(Math.pow(d.target.y - d.source.y, 2) + Math.pow(d.target.x - d.source.x, 2));
-    var scale = (length - radius-10) / length;
+    var scale = (length - radius-8) / length;
     var offset = (d.target.x - d.source.x) - (d.target.x - d.source.x) * scale;
     return d.target.x - offset;
 };
+
+var lineSourceX2 = function (d) {
+    var length = Math.sqrt(Math.pow(d.target.y - d.source.y, 2) + Math.pow(d.target.x - d.source.x, 2));
+    var scale = (length - radius) / length;
+    var offset = (d.target.x - d.source.x) - (d.target.x - d.source.x) * scale;
+    return d.source.x + offset;
+};
+
 var lineY2 = function (d) {
     var length = Math.sqrt(Math.pow(d.target.y - d.source.y, 2) + Math.pow(d.target.x - d.source.x, 2));
     var scale = (length - radius) / length;
     var offset = (d.target.y - d.source.y) - (d.target.y - d.source.y) * scale;
     return d.target.y - offset;
+};
+
+var lineSourceY2 = function (d) {
+    var length = Math.sqrt(Math.pow(d.target.y - d.source.y, 2) + Math.pow(d.target.x - d.source.x, 2));
+    var scale = (length - radius) / length;
+    var offset = (d.target.y - d.source.y) - (d.target.y - d.source.y) * scale;
+    return d.source.y + offset;
 };
 
 function tickActions() {
@@ -279,12 +325,21 @@ function tickActions() {
         .attr("x", function(d) {return d.x-13;})
         .attr("y", function(d) {return d.y+5;})
 }
+
+    }
+
+
+    componentDidMount() {
+        // D3 Code to create the chart
+        // using this._rootNode as container
+        this.renderNodeGraph();
+
     }
 
 
     shouldComponentUpdate() {
         // Prevents component re-rendering
-        return false;
+        return true;
     }
 
     _setRef(componentNode) {

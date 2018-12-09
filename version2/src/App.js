@@ -35,9 +35,9 @@ class App extends Component {
     remoteDataManager: null,
     localDataLoaded: false,
     source: 1,
-    activeTemplate: 4,
+    activeTemplate: 0,
     companyList: [],
-    activeCompany: "Scania",
+    activeCompany: "",
   }
 
   constructor(props) {
@@ -47,9 +47,11 @@ class App extends Component {
     this.state.localDataManager = localDataManager;
     this.state.remoteDataManager = remoteDataManager;
 
+    /*
     this.state.localDataLoaded = true;
     this.state.localDataManager.setData(testData);
-
+    */
+   
     this.state.companyList = (this.state.source===1 ? localDataManager.getNames() : remoteDataManager.getNames());
   }
 

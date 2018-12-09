@@ -1513,6 +1513,48 @@ const testData = [
           "test": 900,
           "margin": 0.04,
           "earnings": 23636435.8
+        },
+        {
+          "id": 109,
+          "cptyName": "Telia",
+          "Pair": "JPYAUD",
+          "date": "2018/5/11 9:12:29",
+          "side": "sell",
+          "riskAmount": 590910895,
+          "status": "OD",
+          "type": "sp",
+          "info": "",
+          "test": 900,
+          "margin": 0.04,
+          "earnings": 23636435.8
+        },
+        {
+          "id": 110,
+          "cptyName": "Telia",
+          "Pair": "JPYEUR",
+          "date": "2018/5/23 9:12:29",
+          "side": "sell",
+          "riskAmount": 590910895,
+          "status": "OD",
+          "type": "sp",
+          "info": "",
+          "test": 900,
+          "margin": 0.04,
+          "earnings": 23636435.8
+        },
+        {
+          "id": 111,
+          "cptyName": "Telia",
+          "Pair": "AUDSEK",
+          "date": "2018/5/23 9:12:29",
+          "side": "sell",
+          "riskAmount": 590910895,
+          "status": "OD",
+          "type": "sp",
+          "info": "",
+          "test": 900,
+          "margin": 0.04,
+          "earnings": 23636435.8
         }
       ]
 

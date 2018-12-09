@@ -299,6 +299,41 @@ class LocalDataManager {
         return results2;
     }
 
+
+    getDataGraph(interval, filter) {
+        var results = [];
+        for(let d in this.data) {
+            var e = {};
+            if(this.filterEqual(filter, this.data[d]) && this.inInterval(interval, this.data[d])) {
+                e["Pair"] = this.data[d]["Pair"];
+                e["status"] = this.data[d]["status"];
+                e["riskAmount"] = this.data[d]["riskAmount"];
+                results.push(e);
+            }
+        }
+
+        var results2 = {};
+        var setList = this.getSetOfValues("Pair", results);
+        results2.links = [];
+        let stlist = [];
+
+        for(let s in setList) {
+            var e = {};
+            e.volume = this.sumFilter({Pair: setList[s], status: "OD"}, "riskAmount", results);
+            e.source = setList[s].substring(0,3)
+            e.target = setList[s].substring(3, 6)
+            stlist.push(e.source)
+            stlist.push(e.target)
+            results2.links.push(e);
+        }
+
+        setList = Array.from(new Set(stlist));
+        results2.nodes = setList.map(e => {return {name: e}});
+
+        console.log(results2);
+        return results2;
+    }
+
     isLoaded() {
         if(this.data) return true;
         else return false; 

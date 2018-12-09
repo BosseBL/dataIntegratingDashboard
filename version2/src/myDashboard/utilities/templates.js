@@ -44,20 +44,85 @@ var templates = [
             }, // pie
         ],
     },
+
     {
-        name: "Only Table",
+        name: "Volume Table",
         components: [
             {
-                component: DataTable,
+                component: DataTest,
                 attributes: {
-                companySpecific: false,
+                    interval: ["2018-01-01", "2019-01-01"],
+                    granularity: "month"
                 },
-            }, // Table
+            }
         ],
     },
     {
-        name: "Empty",
-        components: [],
+        name: "Product Pie",
+        components: [
+            {
+                component: TestPie,
+                attributes: {
+                    filter: {},
+                    companySpecific: true,
+                    interval: ["2018-01-01", "2019-01-01"],
+                },
+            }
+        ],
+    },
+    {
+        name: "Tree Graph",
+        components: [
+            {
+                component: TestTree,
+                attributes: {
+                    valueKey: "riskAmount",
+                    filter: {},
+                    companySpecific: true,
+                    interval: ["2018-01-01", "2019-01-01"],
+                    hierarchy: ["Pair", "type", "status", ],
+                }
+            }
+        ],
+    },
+    {
+        name: "Table",
+        components: [
+            {
+                component: TestTable,
+                attributes: {
+                    interval: ["2018-01-01", "2019-01-01"],
+                    filter: {},
+                    companySpecific: true,
+                }
+            }
+        ],
+    },
+    {
+        name: "Overview List",
+        components: [
+            {
+                component: TestList,
+                attributes: {
+                    interval: ["2018-01-01", "2019-01-01"],
+                    filter: {},
+                    companySpecific: true,
+                }
+            }
+        ],
+    },
+    {
+        name: "Node Graph",
+        components: [
+            {
+                component: TestGraph,
+                attributes: {
+                    interval: ["2018-01-01", "2019-01-01"],
+                    filter: {},
+                    companySpecific: true,
+                }
+            }
+        ],
     },
     {
         name: "Test",
@@ -105,17 +170,13 @@ var templates = [
             },
             {
                 component: TestGraph,
-                attributes: {}
+                attributes: {
+                    interval: ["2018-01-01", "2019-01-01"],
+                    filter: {},
+                    companySpecific: true,
+                }
             },
             
-        ],
-    },
-    {
-        name: "Graph",
-        components: [
-            {
-                component: TestGraph,
-            }
         ],
     },
     
