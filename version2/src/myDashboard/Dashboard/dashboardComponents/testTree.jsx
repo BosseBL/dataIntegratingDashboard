@@ -22,7 +22,24 @@ const styles = theme => ({
 class CustomizedContent extends React.Component {
     render() {
       const { root, depth, x, y, width, height, index, payload, colors, rank, name } = this.props;
-        
+     
+      var text;
+      
+    if(depth === 1) {
+        text = <text x={x + 8} y={y + 18} fill="#fff" fontSize={16}> {name} </text>
+    }
+    if(depth === 2) {
+        text = <text x={x + width-15} y={y + height-5} textAnchor="middle" fill="#888" stroke="#eee" fontSize={14}> {name} </text>
+    }
+    if(depth === 3) {
+        text = <text x={x + width/2} y={y + height/2} textAnchor="middle" fill="#888" stroke="#eee" fontSize={10}> {name} </text>
+    }
+    else {
+        //text = <text x={x + width/2} y={y + height/2} textAnchor="middle" fill="#888" stroke="#eee" fontSize={12}> {name} </text>
+    }
+
+
+
       return (
         <g>
           <rect
@@ -32,35 +49,13 @@ class CustomizedContent extends React.Component {
             height={height}
             style={{
               fill: depth < 2 ? colors[Math.floor(index / root.children.length * 6)] : 'none',
-              
+              //fillOpacity: depth/2,
               stroke: '#fff',
-              strokeWidth: 3 / (depth + 1e-10),
+              strokeWidth: 5 / (depth + 1e-10),
               strokeOpacity: 1 / (depth + 1e-10),
             }}
           />
-          {
-            depth === 1 ?
-            <text
-            x={x + 8}
-            y={y + 18}
-              fill="#fff"
-              fontSize={16}
-            >
-              {name}
-            </text>
-            : 
-            <text
-            x={x + width / 2}
-            y={y + height / 2 + 7}
-            textAnchor="middle"
-            fill="#888"
-            stroke="#eee"
-            fontSize={16 - depth*2}
-          >
-            {name}
-          </text>
-          }
-          
+          {text}
         </g>
       );
     }
