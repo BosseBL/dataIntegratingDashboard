@@ -35,9 +35,10 @@ class App extends Component {
     remoteDataManager: null,
     localDataLoaded: false,
     source: 1,
-    activeTemplate: 0,
+    activeTemplate: 1,
+    template: {},
     companyList: [],
-    activeCompany: "",
+    activeCompany: "Scania",
   }
 
   constructor(props) {
@@ -46,12 +47,9 @@ class App extends Component {
     this.state.templateManager = new TemplateManager();
     this.state.localDataManager = localDataManager;
     this.state.remoteDataManager = remoteDataManager;
-
-    /*
+    this.state.template = this.state.templateManager.getTemplate(this.state.activeTemplate);
     this.state.localDataLoaded = true;
     this.state.localDataManager.setData(testData);
-    */
-   
     this.state.companyList = (this.state.source===1 ? localDataManager.getNames() : remoteDataManager.getNames());
   }
 
@@ -79,7 +77,8 @@ class App extends Component {
   }
 
   changeActiveTemplate(index) {
-    this.setState({activeTemplate: index});
+    var newTemplate = this.state.templateManager.getTemplate(index);
+    this.setState({activeTemplate: index, template: newTemplate});
   }
 
   handleSearch(target) {
@@ -87,7 +86,14 @@ class App extends Component {
     if(this.state.companyList.includes(target)) {
       this.setState({activeCompany: target});
       console.log("changed");
+    }
   }
+
+  handleDeleteComponent(componentIndex) {
+    var newTemplate = this.state.template;
+    delete newTemplate.components[componentIndex];
+    this.setState({template: newTemplate});
+    console.log("deleted component ", componentIndex);
   }
 
   render() {
@@ -102,6 +108,7 @@ class App extends Component {
               handleSourceChange: this.handleSourceChange.bind(this),
               changeActiveTemplate: this.changeActiveTemplate.bind(this),
               handleSearch: this.handleSearch.bind(this),
+              handleDeleteComponent: this.handleDeleteComponent.bind(this),
             }}
             >
             <Dashboard activeCompany={this.state.activeCompany}/>

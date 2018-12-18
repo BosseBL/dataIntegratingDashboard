@@ -30,8 +30,8 @@ class DashboardArea extends React.Component {
         {(context) => {
             let dm = null;
             let tm = context.state.templateManager;
-            let template = tm.getTemplate(context.state.activeTemplate);
-
+            //let template = tm.getTemplate(context.state.activeTemplate);
+            let template = context.state.template;
             if(context.state.source === 0) dm = context.state.remoteDataManager;
             else if(context.state.source === 1) {
                 dm = context.state.localDataManager;
@@ -55,11 +55,20 @@ class DashboardArea extends React.Component {
                             <Grid container spacing={16}>
                             {template.components.map((e, i) => {
                                 return(
-                                    <e.component key={i} dm={dm} attributes={e.attributes} companyName={this.props.activeCompany} colors={COLORS}/>
+                                    <e.component
+                                        handleDeleteComponent={context.handleDeleteComponent} 
+                                        key={i} 
+                                        dm={dm} 
+                                        attributes={e.attributes} 
+                                        companyName={this.props.activeCompany} 
+                                        colors={COLORS}/>
                                 );
                             })}
                                 <Grid item xs={this.props.xs}>
-                                <Button variant="fab" className={classes.addButton} color="primary">
+                                <Button 
+                                    variant="fab" 
+                                    className={classes.addButton} 
+                                    color="primary">
                                     <AddIcon />
                                 </Button>
                                 </Grid>

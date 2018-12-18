@@ -266,8 +266,16 @@ class LocalDataManager {
             e.earnings = this.sumFilter({Pair: e.Pair}, "earnings", results);
             results2.push(e);
         }
-        console.log(results2);
         return results2;
+    }
+
+    getTrend(data) {
+        function reducer(acc, c) {return acc + c}
+        var meanX = data.map(d => {return d.x}).reduce(reducer)/(1.0*data.length)
+        var meanY = data.map(d => {return d.y}).reduce(reducer)/(1.0*data.length)
+        var ssXX = data.map(d => {return (d.x-meanX)**2}).reduce(reducer)
+        var ssXY = data.map(d => {return (d.x - meanX)*(d.y-meanY)}).reduce(reducer)
+        return ssXY/ssXX
     }
 
     getDataList(filter, interval) {
@@ -289,12 +297,16 @@ class LocalDataManager {
 
         var volume = this.sumFilter({status:"OD"}, "riskAmount", results);
         var totalVolume = this.sumFilter({}, "riskAmount", results);
+        var earningsTrend = this.getTrend(results.map(e => {return {x: moment(e.date).month(), y: Number(e.earnings)}}))
+        var volumeTrend = this.getTrend(results.filter(e => {return e.status === "OD"}).map(e => {return {x: moment(e.date).month(), y: Number(e.riskAmount)}}))
+        var askedVolumeTrend = this.getTrend(results.map(e => {return {x: moment(e.date).month(), y: Number(e.riskAmount)}}))
+        var HRTrend = volumeTrend/askedVolumeTrend
 
         var results2 = [
-            {name: "Earnings", value: this.sumFilter({}, "earnings", results)},
-            {name: "Volume", value: volume},
-            {name: "Asked Volume", value: totalVolume},
-            {name: "Hit Ratio", value: Math.floor((volume/totalVolume)*100)},
+            {name: "Earnings", value: this.sumFilter({}, "earnings", results), trend: earningsTrend},
+            {name: "Volume", value: volume, trend: volumeTrend},
+            {name: "Asked Volume", value: totalVolume, trend: askedVolumeTrend},
+            {name: "Hit Ratio", value: Math.floor((volume/totalVolume)*100), trend: HRTrend},
         ];
         return results2;
     }
@@ -330,7 +342,6 @@ class LocalDataManager {
         setList = Array.from(new Set(stlist));
         results2.nodes = setList.map(e => {return {name: e}});
 
-        console.log(results2);
         return results2;
     }
 

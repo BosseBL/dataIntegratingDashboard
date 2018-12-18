@@ -60,43 +60,49 @@ class TestTable extends React.Component {
     render() {
         const {classes} = this.props;
 
-        return (
-
-            <DataComponent xs={6} >
-                <Table className={classes.table}>
-                    <TableHead >
-                        <TableRow >
-                            {Object.keys(this.state.data[0]).map(n => {
-                                return (
-                                    <TableCell key={n} className={classes.tableHeader}> {n} </TableCell>
-                                );
-                        })}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody className={classes.tableBody}>
-                        {this.state.data.map(n => {
-                            return (
-                                <TableRow key={n.Pair.toString()}>
-                                    {Object.keys(n).map((key, index) => {
-                                        if(index == 0) {
-                                        return (
-                                            <TableCell key={n.Pair.toString() + key}> {n[key]} </TableCell>
-                                        );
-                                        }
-                                        else {
-                                            return (
-                                                <TableCell key={n.Pair.toString() + key}> {this.roundDown(n[key])} </TableCell>
-                                            );
-                                        }
-                                    })}
-                                </TableRow>
-
-                                );
+        if(this.props.companyName) {
+            return (
+                <DataComponent xs={6} >
+                    <Table className={classes.table}>
+                        <TableHead >
+                            <TableRow >
+                                {Object.keys(this.state.data[0]).map(n => {
+                                    return (
+                                        <TableCell key={n} className={classes.tableHeader}> {n} </TableCell>
+                                    );
                             })}
-                        </TableBody>        
-                    </Table>
-                </DataComponent>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody className={classes.tableBody}>
+                            {this.state.data.map(n => {
+                                return (
+                                    <TableRow key={n.Pair.toString()}>
+                                        {Object.keys(n).map((key, index) => {
+                                            if(index == 0) {
+                                            return (
+                                                <TableCell key={n.Pair.toString() + key}> {n[key]} </TableCell>
+                                            );
+                                            }
+                                            else {
+                                                return (
+                                                    <TableCell key={n.Pair.toString() + key}> {this.roundDown(n[key])} </TableCell>
+                                                );
+                                            }
+                                        })}
+                                    </TableRow>
+
+                                    );
+                                })}
+                            </TableBody>        
+                        </Table>
+                    </DataComponent>
                 );
+            }
+            else {
+                return (
+                    <DataComponent xs={6} ></DataComponent>
+                );
+            }
     }
 }
 

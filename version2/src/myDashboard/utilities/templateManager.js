@@ -14,6 +14,15 @@ class TemplateManager {
     }
     getTemplates() {return this.templates;}
     getTemplateNames() {return this.templates.map((t) => {return t.name});}
+
+    deleteActiveComponent(componentIndex) {
+        delete this.activeTemplate.components[componentIndex];
+    }
+
+    saveTemplateAs(name) {
+        var newTemplate = {name: name, components: this.activeTemplate.components};
+        this.templates.push(newTemplate);
+    }
 }
 
 export default TemplateManager;

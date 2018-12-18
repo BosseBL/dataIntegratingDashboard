@@ -6,6 +6,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import DataComponent from './dataComponent';
+import TrendingDown from '@material-ui/icons/TrendingDown';
+import TrendingUp from '@material-ui/icons/TrendingUp';
 
 const styles = theme => ({
     table : {
@@ -35,7 +37,7 @@ class TestList extends React.Component {
         this.state.filter = props.attributes.filter;
         this.state.filter.cptyName = props.companyName;
         this.state.companyName = props.companyName;
-        this.state.data = this.dm.getDataList(this.state.filter, this.state.interval);
+        if(props.companyName) this.state.data = this.dm.getDataList(this.state.filter, this.state.interval);
     }
 
     componentWillReceiveProps(nextProp) {
@@ -49,31 +51,34 @@ class TestList extends React.Component {
 
     render() {
         const {classes} = this.props;
+        if(this.props.companyName) {
+            return (
+                <DataComponent xs={6} >
+                    <Table className={classes.table}>
+                        <TableBody className={classes.tableBody}>
+                            {this.state.data.map(n => {
+                                return (
+                                    <TableRow key={n.name.toString()}>
+                                        <TableCell> {n.name} </TableCell>
+                                        <TableCell> {n.value} </TableCell>
+                                        <TableCell> 
+                                            {n.trend > 0 ? <TrendingUp/> : <TrendingDown/> }
+                                        </TableCell>
+                                    </TableRow>
 
-        return (
+                                    );
+                                })}
+                            </TableBody>        
+                        </Table>
+                    </DataComponent>
+                    );
+        }        
+        else {
+            return (
+                <DataComponent xs={6} ></DataComponent>
+            );
+        }
 
-            <DataComponent xs={6} >
-                <Table className={classes.table}>
-                    <TableBody className={classes.tableBody}>
-                        {this.state.data.map(n => {
-                            return (
-                                <TableRow key={n.name.toString()}>
-                                    {Object.keys(n).map((key, index) => {
-                                        return (
-                                            <TableCell key={index}> {n[key]} </TableCell>
-                                        );
-                                    })}
-                                </TableRow>
-
-                                );
-                            })}
-                        </TableBody>        
-                    </Table>
-                </DataComponent>
-                );
-            
-
-        
     }
 }
 

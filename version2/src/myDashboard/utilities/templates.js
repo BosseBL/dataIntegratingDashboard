@@ -80,7 +80,7 @@ var templates = [
                     filter: {},
                     companySpecific: true,
                     interval: ["2018-01-01", "2019-01-01"],
-                    hierarchy: ["Pair", "type", "status", ],
+                    hierarchy: ["type", "status", "side",],
                 }
             }
         ],
@@ -149,7 +149,7 @@ var templates = [
                     filter: {},
                     companySpecific: true,
                     interval: ["2018-01-01", "2019-01-01"],
-                    hierarchy: ["Pair", "type", "status", ],
+                    hierarchy: ["type", "status", "side", ],
                 }
             },
             {
